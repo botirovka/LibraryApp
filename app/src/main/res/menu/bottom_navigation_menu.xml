@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/books"
+        android:title="Books"
+        android:icon="@drawable/book_icon" />
+
+    <item
+        android:id="@+id/borrowed_books"
+        android:title="Borrowed"
+        android:icon="@drawable/borrowed_books_icon" />
+    <item
+        android:id="@+id/add_book"
+        android:title="Add New Book"
+        android:icon="@drawable/add_icon" />
+</menu>
