@@ -1,6 +1,8 @@
 package com.botirovka.libraryapp.data
 
 import com.botirovka.libraryapp.models.Book
+import com.botirovka.libraryapp.models.Extensions.Companion.groupByGenre
+import com.botirovka.libraryapp.models.Extensions.Companion.sortedByTitleAvailableFirstAscending
 import com.botirovka.libraryapp.models.Genres
 import com.botirovka.libraryapp.models.State
 import kotlinx.coroutines.delay
@@ -40,7 +42,7 @@ object Library {
                 "J.K. Rowling",
                 Genres.FANTASY,
                 "https://i.imgur.com/bEe75Ri.png",
-                true
+                5
             ),
             Book("Test Book", "Without Image", Genres.THRILLER)
         )
@@ -58,11 +60,62 @@ object Library {
     suspend fun getAllBorrowedBooks(): State {
         delay(2000)
         return if (books.isNotEmpty()) {
-            State.Data(books.filter { it.isBorrowed }.toList())
+            State.Data(books.filter { it.borrowedCount > 0 }.toList())
         } else {
             State.Error("No books found")
         }
     }
+    //Task 1.2
+    fun getAllBooksByGenre(): Map<Genres, List<Book>> {
+        return books.groupByGenre()
+    }
+
+    fun getSortedBooksByAvailability(): List<Book> {
+        return books.sortedByTitleAvailableFirstAscending()
+    }
+
+    fun countBooksByGenre(): Map<Genres, Int> {
+        return books.groupBy { it.genre }.mapValues { it.value.size }
+    }
+
+    fun countBooksByAuthor(): Map<String, Int> {
+        return books.groupBy { it.author }.mapValues { it.value.size }
+    }
+
+    fun getMostPopularBooks(topCount: Int): List<Book> {
+        return books
+            .filter { it.borrowedCount > 0 }
+            .sortedByDescending { it.borrowedCount }
+            .take(topCount)
+    }
+
+    fun getBorrowedBooksSummaryByGenre(): Map<Genres, Int> {
+        return books
+            .filter { it.borrowedCount > 0 }
+            .groupBy { it.genre }
+            .mapValues { entry ->
+                entry.value.sumOf { it.borrowedCount }
+            }
+    }
+
+    fun getTrendingAuthor(): String? {
+        val currentTime = System.currentTimeMillis()
+
+        return books
+            .filter { it.lastBorrowedTime != null && currentTime - it.lastBorrowedTime!! <= 5 * 60 * 1000 }
+            .groupBy { it.author }
+            .maxByOrNull { it.value.size }
+            ?.key
+    }
+
+    fun getAvailableBooks(): List<Book>{
+        return books.filter { it.isAvailable }
+    }
+
+    fun getUniqueAuthors(): Set<String>{
+        return books.groupBy { it.author }.keys
+    }
+
 
     fun addBook(book: Book): Int {
         books.add(book)
@@ -78,9 +131,10 @@ object Library {
     }
 
     fun borrowBook(title: String): Boolean {
-        val bookByTitle = books.find { it.title == title && !it.isBorrowed }
+        val bookByTitle = books.find { it.title == title }
         if (bookByTitle != null) {
-            bookByTitle.isBorrowed = !bookByTitle.isBorrowed
+            bookByTitle.borrowedCount++
+            bookByTitle.lastBorrowedTime = System.currentTimeMillis()
             return true
         }
         return false
@@ -88,9 +142,9 @@ object Library {
 
 
     fun returnBook(title: String): Boolean {
-        val bookByTitle = books.find { it.title == title && it.isBorrowed }
+        val bookByTitle = books.find { it.title == title && it.borrowedCount > 0 }
         if (bookByTitle != null) {
-            bookByTitle.isBorrowed = !bookByTitle.isBorrowed
+            bookByTitle.borrowedCount--
             return true
         }
         return false

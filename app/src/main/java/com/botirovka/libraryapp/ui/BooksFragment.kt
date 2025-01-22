@@ -1,7 +1,6 @@
 package com.botirovka.libraryapp.ui
 
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -12,6 +11,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.botirovka.libraryapp.R
 import com.botirovka.libraryapp.data.Library
+import com.botirovka.libraryapp.models.Book
 import com.botirovka.libraryapp.models.State
 import com.botirovka.libraryapp.ui.adapters.BooksAdapter
 import kotlinx.coroutines.launch
@@ -20,7 +20,9 @@ class BooksFragment : Fragment() {
 
     private lateinit var recyclerView: RecyclerView
     private lateinit var booksAdapter: BooksAdapter
-    private var isBorrowed: Boolean = false
+    private lateinit var bookList: List<Book>
+    private var isBorrowedFragment: Boolean = false
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -30,18 +32,22 @@ class BooksFragment : Fragment() {
         recyclerView = view.findViewById(R.id.books_rv)
         recyclerView.layoutManager = LinearLayoutManager(requireContext())
 
-        isBorrowed = arguments?.getBoolean("is_borrowed") ?: false
+        isBorrowedFragment = arguments?.getBoolean("is_borrowed") ?: false
 
         loadBooks()
 
         return view
     }
 
+    private fun groupBooks(){
+
+    }
+
     private fun loadBooks() {
         lifecycleScope.launch {
 
             val booksState : State
-            if(isBorrowed ){
+            if(isBorrowedFragment ){
                 booksState = Library.getAllBorrowedBooks()
 
             }
@@ -53,9 +59,8 @@ class BooksFragment : Fragment() {
                 is State.Data -> {
                     booksAdapter = BooksAdapter(booksState.data) {
                         book ->
-                        if(book.isBorrowed){
-                            Log.d("mydebug", "loadBooks: " + Library.returnBook(book.title) )
-
+                        if(book.borrowedCount > 0){
+                            Library.returnBook(book.title)
                         }
                         else{
                             Library.borrowBook(book.title)

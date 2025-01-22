@@ -5,5 +5,7 @@ data class Book (
     val author: String,
     val genre: Genres,
     val image: String = "",
-    var isBorrowed: Boolean = false
+    var borrowedCount: Int = 0,
+    val isAvailable: Boolean = true,
+    var lastBorrowedTime: Long? = null
 )
