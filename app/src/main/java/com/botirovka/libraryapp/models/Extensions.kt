@@ -1,8 +1,23 @@
 package com.botirovka.libraryapp.models
 
+
 class Extensions {
 
  companion object{
+
+     fun Book.toPrettyString(): String{
+         return ("\n Book " + this.title +
+                 "\n Author: " + this.author +
+                 "\n Genre: " + this.genre +
+                 "\n Image:" + this.image +
+                 "\n Borrowed Count: " + this.borrowedCount +
+                 "\n Is Available?: " + this.isAvailable +
+                 "\n Last Borrowed Time: " + this.lastBorrowedTime)
+     }
+
+     fun List<Book>.printPretty(): String{
+         return this.joinToString { it.toPrettyString() }
+     }
 
      fun List<Book>.groupByGenre(): Map<Genres, List<Book>> {
          return this.groupBy { it.genre }

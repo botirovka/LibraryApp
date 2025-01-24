@@ -21,6 +21,7 @@ class BooksAdapter(
         val authorTextView: TextView = itemView.findViewById(R.id.book_author)
         val genreTextView: TextView = itemView.findViewById(R.id.book_genre)
         val imageView: ImageView = itemView.findViewById(R.id.book_image)
+        val copiesCounterTextView: TextView = itemView.findViewById(R.id.copies_available_count)
 
         init {
             itemView.setOnClickListener {
@@ -42,6 +43,7 @@ class BooksAdapter(
         holder.titleTextView.text = book.title
         holder.authorTextView.text = book.author
         holder.genreTextView.text = book.genre.name
+        holder.copiesCounterTextView.text = book.totalBookCount.toString()
         if (book.image.isNotEmpty()) {
             Glide.with(holder.itemView.context)
                 .load(book.image)
