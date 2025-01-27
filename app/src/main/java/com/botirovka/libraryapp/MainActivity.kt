@@ -41,7 +41,7 @@ class MainActivity : AppCompatActivity() {
         testAllCoroutinesAtTheSameTime()
     }
 
-    //start and end simultaneously, work asynchronous?
+    //start and end simultaneously, work asynchronous
 
     private fun testAllCoroutinesAtTheSameTime() {
         CoroutineScope(Dispatchers.IO).launch {

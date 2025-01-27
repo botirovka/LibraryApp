@@ -14,42 +14,11 @@ object Library {
     private val books: MutableList<Book>
     val mockDelay: Long = 2000L
 
+
+
     init {
         books = mutableListOf(
-            Book("The Hobbit", "J.R.R. Tolkien", Genres.FANTASY, "https://i.imgur.com/mJmmCUv.png"),
-            Book(
-                "The Girl with the Dragon Tattoo",
-                "Stieg Larsson",
-                Genres.THRILLER,
-                "https://i.imgur.com/hIkr1pP.png",
-                2,
-                12
-            ),
-            Book(
-                "Dune",
-                "Frank Herbert",
-                Genres.SCIENCE_FICTION,
-                "https://i.imgur.com/Nn1UyoW.png",
-                0,
-                9
-            ),
-            Book(
-                "Treasure Island",
-                "Robert Louis Stevenson",
-                Genres.ADVENTURE_FICTION,
-                "https://imgur.com/tqvpAMm.png",
-                0,
-                5
-            ),
-            Book(
-                "Pride and Prejudice",
-                "Jane Austen",
-                Genres.CLASSIC,
-                "https://i.imgur.com/oh0bS0P.png",
-                0,
-                3
-            ),
-            Book(
+            Book(0,
                 "Harry Potter and the Sorcerer's Stone",
                 "J.K. Rowling",
                 Genres.FANTASY,
@@ -57,10 +26,107 @@ object Library {
                 5,
                 10,
                 true,
+                System.currentTimeMillis()),
+            Book(0,
+                "The Hobbit",
+                "J.R.R. Tolkien",
+                Genres.FANTASY,
+                "https://i.imgur.com/mJmmCUv.png"),
+            Book(0,
+                "The Girl with the Dragon Tattoo",
+                "Stieg Larsson",
+                Genres.THRILLER,
+                "https://i.imgur.com/hIkr1pP.png",
+                2,
+                12
+            ),
+            Book(0,
+                "Dune",
+                "Frank Herbert",
+                Genres.SCIENCE_FICTION,
+                "https://i.imgur.com/Nn1UyoW.png",
+                0,
+                9
+            ),
+            Book(0,
+                "Treasure Island",
+                "Robert Louis Stevenson",
+                Genres.ADVENTURE_FICTION,
+                "https://imgur.com/tqvpAMm.png",
+                0,
+                5
+            ),
+            Book(0,
+                "Pride and Prejudice",
+                "Jane Austen",
+                Genres.CLASSIC,
+                "https://i.imgur.com/oh0bS0P.png",
+                0,
+                3
+            ),
+            Book(0,
+                "Harry Potter and The Order of the Fenix",
+                "J.K. Rowling",
+                Genres.FANTASY,
+                "https://imgur.com/izIUWtX.png",
+                5,
+                10,
+                true,
                 System.currentTimeMillis()
             ),
-            Book("Test Book", "Without Image", Genres.THRILLER)
+            Book(0,"Test Book", "Without Image", Genres.THRILLER),
+            Book(0,"Test Book1", "Without Image", Genres.THRILLER),
+            Book(0,"Test Book2", "Without Image", Genres.THRILLER),
+            Book(0,"Test Book3", "Without Image", Genres.THRILLER),
+            Book(0,"Test Book4", "Without Image", Genres.THRILLER),
+            Book(0,"Test Book5", "Without Image", Genres.THRILLER),
+            Book(0,"Test Book6", "Without Image", Genres.THRILLER),
+            Book(0,"Test Book7", "Without Image", Genres.THRILLER),
+            Book(0,"Test Book8", "Without Image", Genres.THRILLER),
+            Book(0,"Test Book9", "Without Image", Genres.THRILLER),
+            Book(0,"Test Book", "Without Image", Genres.THRILLER),
+            Book(0,"Test Book", "Without Image", Genres.THRILLER),
+            Book(0,"Test Book", "Without Image", Genres.THRILLER),
+            Book(0,"Test Book", "Without Image", Genres.THRILLER),
+            Book(0,"Test Book", "Without Image", Genres.THRILLER),
+            Book(0,"Test Book", "Without Image", Genres.THRILLER),
+            Book(0,"Test Book", "Without Image", Genres.THRILLER),
+            Book(0,"Test Book", "Without Image", Genres.THRILLER),
+            Book(0,"Test Book", "Without Image", Genres.THRILLER),
+            Book(0,"Test Book", "Without Image", Genres.THRILLER),
+            Book(0,"Test Book", "Without Image", Genres.THRILLER),
+            Book(0,"Test Book", "Without Image", Genres.THRILLER),
+            Book(0,"Test Book", "Without Image", Genres.THRILLER),
+            Book(0,"Test Book", "Without Image", Genres.THRILLER),
+            Book(0,"Test Book", "Without Image", Genres.THRILLER)
         )
+        books.forEachIndexed { index, book -> book.id = index }
+    }
+
+    //TASK 1.5
+    suspend fun getBooksPaginated(page: Int, pageSize: Int): List<Book> {
+        delay(mockDelay)
+        val startIndex = page * pageSize
+        val endIndex = minOf(startIndex + pageSize, books.size)
+
+        return if (startIndex < books.size) {
+            books.slice(startIndex until endIndex)
+        } else {
+            emptyList()
+        }
+    }
+
+    suspend fun getBorrowedBooksPaginated(page: Int, pageSize: Int): List<Book> {
+        delay(mockDelay)
+        val borrowedBooks = books.filter { it.borrowedCount > 0 }
+        val startIndex = page * pageSize
+        val endIndex = minOf(startIndex + pageSize, borrowedBooks.size)
+
+        return if (startIndex < borrowedBooks.size) {
+            borrowedBooks.slice(startIndex until endIndex)
+        } else {
+            emptyList()
+        }
     }
 
     //Refactor all expensive functions

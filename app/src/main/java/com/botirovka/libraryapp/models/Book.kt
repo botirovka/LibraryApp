@@ -1,6 +1,7 @@
 package com.botirovka.libraryapp.models
 
 data class Book (
+    var id: Int = 0,
     val title: String,
     val author: String,
     val genre: Genres,

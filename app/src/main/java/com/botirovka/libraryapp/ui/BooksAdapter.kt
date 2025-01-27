@@ -17,6 +17,7 @@ class BooksAdapter(
 ) : RecyclerView.Adapter<BooksAdapter.BookViewHolder>() {
 
     inner class BookViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        val bookId: TextView = itemView.findViewById(R.id.book_id)
         val titleTextView: TextView = itemView.findViewById(R.id.book_title)
         val authorTextView: TextView = itemView.findViewById(R.id.book_author)
         val genreTextView: TextView = itemView.findViewById(R.id.book_genre)
@@ -40,6 +41,7 @@ class BooksAdapter(
 
     override fun onBindViewHolder(holder: BookViewHolder, position: Int) {
         val book = books[position]
+        holder.bookId.text = book.id.toString()
         holder.titleTextView.text = book.title
         holder.authorTextView.text = book.author
         holder.genreTextView.text = book.genre.name
@@ -47,6 +49,11 @@ class BooksAdapter(
         if (book.image.isNotEmpty()) {
             Glide.with(holder.itemView.context)
                 .load(book.image)
+                .into(holder.imageView)
+        }
+        else{
+            Glide.with(holder.itemView.context)
+                .load(R.drawable.book_icon)
                 .into(holder.imageView)
         }
 
