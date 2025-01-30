@@ -12,7 +12,7 @@ import com.bumptech.glide.Glide
 
 
 class BooksAdapter(
-    private val books: List<Book>,
+    private var books: List<Book>,
     private val onItemClick: (Book) -> Unit
 ) : RecyclerView.Adapter<BooksAdapter.BookViewHolder>() {
 
@@ -32,6 +32,11 @@ class BooksAdapter(
                 }
             }
         }
+    }
+
+    fun updateBooks(newBooks: List<Book>) {
+        books = newBooks
+        notifyDataSetChanged()
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BookViewHolder {

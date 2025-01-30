@@ -12,7 +12,7 @@ import java.time.LocalTime
 
 object Library {
     private val books: MutableList<Book>
-    val mockDelay: Long = 2000L
+    private const val mockDelay: Long = 1000L
 
 
 
@@ -220,9 +220,8 @@ object Library {
        Log.d("mydebug", "borrowBook: ")
         val bookByTitle = books.find { it.title == title }
 
-        if (bookByTitle != null && bookByTitle.totalBookCount > 0) {
+        if (bookByTitle != null && bookByTitle.totalBookCount - bookByTitle.borrowedCount > 0) {
             bookByTitle.borrowedCount++
-            bookByTitle.totalBookCount--
             bookByTitle.lastBorrowedTime = System.currentTimeMillis()
             return true
         }

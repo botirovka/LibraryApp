@@ -10,6 +10,9 @@ import androidx.fragment.app.Fragment
 import com.botirovka.libraryapp.data.Library
 import com.botirovka.libraryapp.databinding.ActivityMainBinding
 import com.botirovka.libraryapp.models.Extensions.Companion.printPretty
+import com.botirovka.libraryapp.mvp.BooksMVPFragment
+import com.botirovka.libraryapp.mvvm.BooksMVIFragment
+import com.botirovka.libraryapp.mvvm.BooksMVVMFragment
 import com.botirovka.libraryapp.ui.BooksFragment
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import kotlinx.coroutines.CoroutineScope
@@ -109,7 +112,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun setupUI() {
-        replaceFragment(BooksFragment())
+        replaceFragment(BooksMVVMFragment())
         setupBottomNavigation()
     }
 
@@ -117,9 +120,9 @@ class MainActivity : AppCompatActivity() {
         bottomNav = binding.bottomNav
         bottomNav.setOnItemSelectedListener { item ->
             when (item.itemId) {
-                R.id.add_book -> replaceFragment(BooksFragment())
-                R.id.books -> replaceFragment(BooksFragment())
-                R.id.borrowed_books -> replaceFragment(BooksFragment(), isBorrowed = true)
+                R.id.add_book -> replaceFragment(BooksMVIFragment())
+                R.id.books -> replaceFragment(BooksMVVMFragment())
+                R.id.borrowed_books -> replaceFragment(BooksMVPFragment())
                 else -> false
             }
         }

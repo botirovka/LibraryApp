@@ -2,15 +2,15 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
         android:id="@+id/books"
-        android:title="Books"
+        android:title="MVVM"
         android:icon="@drawable/book_icon" />
 
     <item
         android:id="@+id/borrowed_books"
-        android:title="Borrowed"
+        android:title="MVP"
         android:icon="@drawable/borrowed_books_icon" />
     <item
         android:id="@+id/add_book"
-        android:title="Add New Book"
+        android:title="MVI"
         android:icon="@drawable/add_icon" />
 </menu>
