@@ -7,6 +7,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import android.widget.EditText
 import android.widget.ProgressBar
 import android.widget.TextView
@@ -15,8 +16,10 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.RecyclerView
+import com.botirovka.libraryapp.data.Library
 import com.botirovka.libraryapp.databinding.FragmentBookMVVMBinding
 import com.botirovka.libraryapp.models.Book
+import com.botirovka.libraryapp.models.Genres
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
@@ -28,6 +31,9 @@ class BooksMVVMFragment : Fragment() {
     private lateinit var loadingProgressBar: ProgressBar
     private lateinit var errorTextView: TextView
     private lateinit var searchEditText: EditText
+    private lateinit var createNewBookButton: Button
+    private var isInitialTextChange = true
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -46,10 +52,30 @@ class BooksMVVMFragment : Fragment() {
         searchEditText = binding.searchEditText
         bookAdapter = BookAdapter(::onBorrowButtonClick)
         booksRecyclerView.adapter = bookAdapter
+        createNewBookButton = binding.createNewBookButton
+
 
         observeViewModel()
         setupSearch()
+
+        createNewBookButton.setOnClickListener {
+            createNewBook()
+        }
     }
+
+    private fun createNewBook() {
+        val newBook = Book(
+            id = 0,
+            title = "New Book Title",
+            author = "New Book Author",
+            genre = Genres.FANTASY,
+            totalBookCount = 10,
+            borrowedCount = 0
+        )
+        Library.addBook(newBook)
+        booksViewModel.fetchBooks()
+    }
+
 
     private fun onBorrowButtonClick(book: Book) {
         booksViewModel.borrowBook(book)
@@ -89,6 +115,10 @@ class BooksMVVMFragment : Fragment() {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                if (isInitialTextChange) {
+                    isInitialTextChange = false
+                    return
+                }
                 val query = s.toString().trim()
                 booksViewModel.searchBooks(query)
             }

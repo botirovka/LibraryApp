@@ -28,6 +28,7 @@ class BooksMVIFragment : Fragment() {
     private lateinit var loadingProgressBar: ProgressBar
     private lateinit var errorTextView: TextView
     private lateinit var searchEditText: EditText
+    private var isInitialTextChange = true
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -61,6 +62,10 @@ class BooksMVIFragment : Fragment() {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                if (isInitialTextChange) {
+                    isInitialTextChange = false
+                    return
+                }
                 val query = s.toString().trim()
                 viewModel.processIntent(BooksIntent.SearchBooks(BooksIntent.SearchBooks(query).query))
             }

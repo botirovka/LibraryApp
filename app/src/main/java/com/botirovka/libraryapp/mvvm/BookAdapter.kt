@@ -1,5 +1,6 @@
 package com.botirovka.libraryapp.mvvm
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -49,7 +50,7 @@ class BookAdapter(private val onClick: (Book) -> Unit) : RecyclerView.Adapter<Bo
             authorTextView.text = book.author
             genreTextView.text = book.genre.name
             availabilityTextView.text = "Available: ${book.totalBookCount - book.borrowedCount}/${book.totalBookCount}"
-
+            Log.d("mydebuga", "${book.totalBookCount}  ${book.borrowedCount}")
             if (book.image != null) {
                 bookImageView.visibility = View.VISIBLE
                 Glide.with(itemView.context)

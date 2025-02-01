@@ -24,9 +24,12 @@ class BooksViewModel : ViewModel() {
 
     private val _bookUnavailableChannel = Channel<String>()
     val bookUnavailableFlow = _bookUnavailableChannel.receiveAsFlow()
+    private var isDataLoaded = false
 
     init {
-        fetchBooks()
+        if (isDataLoaded.not()) {
+            fetchBooks()
+        }
     }
 
     fun fetchBooks() {
@@ -62,18 +65,13 @@ class BooksViewModel : ViewModel() {
 
     fun borrowBook(book: Book) {
         viewModelScope.launch {
-            val updatedBooks = _booksLiveData.value?.map {
-                if (it.id == book.id) {
-                    if (it.totalBookCount - it.borrowedCount == 0) {
-                        _bookUnavailableChannel.send("Book '${it.title}' is not available")
-                        it
-                    } else {
-                        it.copy(borrowedCount = it.borrowedCount + 1)
-                    }
-                } else it
-            } ?: return@launch
+            val isBorrowed = Library.borrowBook(book.title)
+            if (isBorrowed) {
+                _booksLiveData.value = _booksLiveData.value
 
-            _booksLiveData.value = updatedBooks
+            } else {
+                _bookUnavailableChannel.send("Book '${book.title}' is not available")
+            }
         }
     }
 

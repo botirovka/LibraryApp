@@ -57,7 +57,7 @@ class BooksViewModelMVI : ViewModel() {
             withContext(Dispatchers.Main) {
                 when (libraryState) {
                     is State.Data -> {
-                        currentBooks = libraryState.data
+                        currentBooks = libraryState.data.map { it.copy() }
                         _state.update { BooksState.Success(libraryState.data) }
                     }
                     is State.Error -> _state.update { BooksState.Error(libraryState.message) }
@@ -72,6 +72,7 @@ class BooksViewModelMVI : ViewModel() {
         viewModelScope.launch {
             val searchResult = Library.searchBooks(query)
             withContext(Dispatchers.Main) {
+                currentBooks = searchResult.map { it.copy() }
                 _state.update { BooksState.Success(searchResult) }
             }
         }
@@ -79,18 +80,21 @@ class BooksViewModelMVI : ViewModel() {
 
     private fun borrowBook(book: Book) {
         viewModelScope.launch {
-            if (book.totalBookCount - book.borrowedCount == 0) {
+            val isBorrowed = Library.borrowBook(book.title)
+            if (isBorrowed) {
+                val updatedBooks = currentBooks.map { currentBook ->
+                    if (currentBook.title == book.title) {
+                        currentBook.copy(borrowedCount = currentBook.borrowedCount + 1)
+                    } else {
+                        currentBook.copy()
+                    }
+                }
+                currentBooks = updatedBooks
+                _state.update { BooksState.Success(updatedBooks) }
+            }
+            else{
                 _state.update { BooksState.BookUnavailable("Book '${book.title}' is not available") }
-                return@launch
             }
-
-            val updatedBooks = currentBooks.map {
-                if (it.id == book.id) {
-                    it.copy(borrowedCount = it.borrowedCount + 1)
-                } else it
-            }
-            currentBooks = updatedBooks
-            _state.update { BooksState.Success(updatedBooks) }
         }
     }
 

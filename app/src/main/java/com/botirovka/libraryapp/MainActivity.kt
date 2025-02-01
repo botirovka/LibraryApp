@@ -13,7 +13,6 @@ import com.botirovka.libraryapp.models.Extensions.Companion.printPretty
 import com.botirovka.libraryapp.mvp.BooksMVPFragment
 import com.botirovka.libraryapp.mvvm.BooksMVIFragment
 import com.botirovka.libraryapp.mvvm.BooksMVVMFragment
-import com.botirovka.libraryapp.ui.BooksFragment
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -28,7 +27,7 @@ class MainActivity : AppCompatActivity() {
         enableEdgeToEdge()
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        setupUI()
+        setupUI(savedInstanceState)
         doOnBackground()
 
         ViewCompat.setOnApplyWindowInsetsListener(binding.main) { v, insets ->
@@ -41,7 +40,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun doOnBackground(){
         Log.d("coroutines", "doOnBackground")
-        testAllCoroutinesAtTheSameTime()
+        //testAllCoroutinesAtTheSameTime()
     }
 
     //start and end simultaneously, work asynchronous
@@ -111,8 +110,10 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun setupUI() {
-        replaceFragment(BooksMVVMFragment())
+    private fun setupUI(savedInstanceState: Bundle?) {
+        if (savedInstanceState == null) {
+            replaceFragment(BooksMVVMFragment())
+        }
         setupBottomNavigation()
     }
 

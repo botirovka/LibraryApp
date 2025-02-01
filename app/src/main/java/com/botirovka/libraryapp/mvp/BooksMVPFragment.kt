@@ -23,13 +23,13 @@ import com.botirovka.libraryapp.mvvm.BookAdapter
 
 class BooksMVPFragment : Fragment(), ShowBookView {
     private lateinit var binding: FragmentBooksMVPBinding
-    private lateinit var presenter: Presenter
     private lateinit var booksRecyclerView: RecyclerView
     private lateinit var bookAdapter: BookAdapter
     private lateinit var loadingProgressBar: ProgressBar
     private lateinit var errorTextView: TextView
     private lateinit var searchEditText: EditText
     private var currentBooks: List<Book> = emptyList()
+    private var isInitialTextChange = true
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -42,9 +42,6 @@ class BooksMVPFragment : Fragment(), ShowBookView {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        presenter = Presenter()
-        presenter.attachView(this)
-
         booksRecyclerView = binding.booksRecyclerView
         loadingProgressBar = binding.loadingProgressBar
         errorTextView = binding.errorTextView
@@ -52,14 +49,16 @@ class BooksMVPFragment : Fragment(), ShowBookView {
         bookAdapter = BookAdapter(::onBorrowButtonClickMVP)
         booksRecyclerView.adapter = bookAdapter
 
+        Presenter.attachView(this)
+        Presenter.fetchBooks()
         setupSearch()
         observeBookUnavailableFlow()
-        presenter.fetchBooks()
+
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
-        presenter.detachView()
+        Presenter.detachView()
     }
 
     private fun setupSearch() {
@@ -67,8 +66,9 @@ class BooksMVPFragment : Fragment(), ShowBookView {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+
                 val query = s.toString().trim()
-                presenter.searchBooks(query)
+                Presenter.searchBooks(query)
             }
 
             override fun afterTextChanged(editable: Editable?) {}
@@ -77,14 +77,14 @@ class BooksMVPFragment : Fragment(), ShowBookView {
 
     private fun observeBookUnavailableFlow() {
         viewLifecycleOwner.lifecycleScope.launch {
-            presenter.bookUnavailableFlow.collectLatest { message ->
+            Presenter.bookUnavailableFlow.collectLatest { message ->
                 Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
             }
         }
     }
 
     private fun onBorrowButtonClickMVP(book: Book) {
-    presenter.borrowBook(book)
+        Presenter.borrowBook(book)
     }
 
     private fun onReturnButtonClickMVP(book: Book) {
