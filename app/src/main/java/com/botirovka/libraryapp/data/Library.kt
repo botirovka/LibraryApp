@@ -15,10 +15,10 @@ object Library {
     private const val mockDelay: Long = 1000L
 
 
-
     init {
         books = mutableListOf(
-            Book(0,
+            Book(
+                0,
                 "Harry Potter and the Sorcerer's Stone",
                 "J.K. Rowling",
                 Genres.FANTASY,
@@ -26,13 +26,17 @@ object Library {
                 5,
                 10,
                 true,
-                System.currentTimeMillis()),
-            Book(0,
+                System.currentTimeMillis()
+            ),
+            Book(
+                0,
                 "The Hobbit",
                 "J.R.R. Tolkien",
                 Genres.FANTASY,
-                "https://i.imgur.com/mJmmCUv.png"),
-            Book(0,
+                "https://i.imgur.com/mJmmCUv.png"
+            ),
+            Book(
+                0,
                 "The Girl with the Dragon Tattoo",
                 "Stieg Larsson",
                 Genres.THRILLER,
@@ -40,7 +44,8 @@ object Library {
                 2,
                 12
             ),
-            Book(0,
+            Book(
+                0,
                 "Dune",
                 "Frank Herbert",
                 Genres.SCIENCE_FICTION,
@@ -48,7 +53,8 @@ object Library {
                 0,
                 9
             ),
-            Book(0,
+            Book(
+                0,
                 "Treasure Island",
                 "Robert Louis Stevenson",
                 Genres.ADVENTURE_FICTION,
@@ -56,7 +62,8 @@ object Library {
                 0,
                 5
             ),
-            Book(0,
+            Book(
+                0,
                 "Pride and Prejudice",
                 "Jane Austen",
                 Genres.CLASSIC,
@@ -64,7 +71,8 @@ object Library {
                 0,
                 3
             ),
-            Book(0,
+            Book(
+                0,
                 "Harry Potter and The Order of the Fenix",
                 "J.K. Rowling",
                 Genres.FANTASY,
@@ -74,39 +82,41 @@ object Library {
                 true,
                 System.currentTimeMillis()
             ),
-            Book(0,"Test Book", "Without Image", Genres.THRILLER),
-            Book(0,"Test Book1", "Without Image", Genres.THRILLER),
-            Book(0,"Test Book2", "Without Image", Genres.THRILLER),
-            Book(0,"Test Book3", "Without Image", Genres.THRILLER),
-            Book(0,"Test Book4", "Without Image", Genres.THRILLER),
-            Book(0,"Test Book5", "Without Image", Genres.THRILLER),
-            Book(0,"Test Book6", "Without Image", Genres.THRILLER),
-            Book(0,"Test Book7", "Without Image", Genres.THRILLER),
-            Book(0,"Test Book8", "Without Image", Genres.THRILLER),
-            Book(0,"Test Book9", "Without Image", Genres.THRILLER),
-            Book(0,"Test Book", "Without Image", Genres.THRILLER),
-            Book(0,"Test Book", "Without Image", Genres.THRILLER),
-            Book(0,"Test Book", "Without Image", Genres.THRILLER),
-            Book(0,"Test Book", "Without Image", Genres.THRILLER),
-            Book(0,"Test Book", "Without Image", Genres.THRILLER),
-            Book(0,"Test Book", "Without Image", Genres.THRILLER),
-            Book(0,"Test Book", "Without Image", Genres.THRILLER),
-            Book(0,"Test Book", "Without Image", Genres.THRILLER),
-            Book(0,"Test Book", "Without Image", Genres.THRILLER),
-            Book(0,"Test Book", "Without Image", Genres.THRILLER),
-            Book(0,"Test Book", "Without Image", Genres.THRILLER),
-            Book(0,"Test Book", "Without Image", Genres.THRILLER),
-            Book(0,"Test Book", "Without Image", Genres.THRILLER),
-            Book(0,"Test Book", "Without Image", Genres.THRILLER),
-            Book(0,"Test Book", "Without Image", Genres.THRILLER)
+            Book(0, "Test Book", "Without Image", Genres.THRILLER),
+            Book(0, "Test Book1", "Without Image", Genres.THRILLER),
+            Book(0, "Test Book2", "Without Image", Genres.THRILLER),
+            Book(0, "Test Book3", "Without Image", Genres.THRILLER),
+            Book(0, "Test Book4", "Without Image", Genres.THRILLER),
+            Book(0, "Test Book5", "Without Image", Genres.THRILLER),
+            Book(0, "Test Book6", "Without Image", Genres.THRILLER),
+            Book(0, "Test Book7", "Without Image", Genres.THRILLER),
+            Book(0, "Test Book8", "Without Image", Genres.THRILLER),
+            Book(0, "Test Book9", "Without Image", Genres.THRILLER),
+            Book(0, "Test Book", "Without Image", Genres.THRILLER),
+            Book(0, "Test Book", "Without Image", Genres.THRILLER),
+            Book(0, "Test Book", "Without Image", Genres.THRILLER),
+            Book(0, "Test Book", "Without Image", Genres.THRILLER),
+            Book(0, "Test Book", "Without Image", Genres.THRILLER),
+            Book(0, "Test Book", "Without Image", Genres.THRILLER),
+            Book(0, "Test Book", "Without Image", Genres.THRILLER),
+            Book(0, "Test Book", "Without Image", Genres.THRILLER),
+            Book(0, "Test Book", "Without Image", Genres.THRILLER),
+            Book(0, "Test Book", "Without Image", Genres.THRILLER),
+            Book(0, "Test Book", "Without Image", Genres.THRILLER),
+            Book(0, "Test Book", "Without Image", Genres.THRILLER),
+            Book(0, "Test Book", "Without Image", Genres.THRILLER),
+            Book(0, "Test Book", "Without Image", Genres.THRILLER),
+            Book(0, "Test Book", "Without Image", Genres.THRILLER)
         )
         books.forEachIndexed { index, book -> book.id = index }
     }
 
     //TASK 1.5
-    suspend fun getBooksPaginated(page: Int, pageSize: Int): List<Book> {
+    suspend fun getBooksPaginated(page: Int, pageSize: Int, index: Int = 0): List<Book> {
         delay(mockDelay)
-        val startIndex = page * pageSize
+
+        val startIndex = index + (page * pageSize)
+
         val endIndex = minOf(startIndex + pageSize, books.size)
 
         return if (startIndex < books.size) {
@@ -131,7 +141,7 @@ object Library {
 
     //Refactor all expensive functions
     suspend fun getAllBooks(): State {
-        delay(mockDelay+2000)
+        delay(mockDelay + 2000)
         return if (books.isNotEmpty()) {
             State.Data(books.toList())
         } else {
@@ -191,13 +201,13 @@ object Library {
             ?.key
     }
 
-    suspend fun getAvailableBooks(): List<Book>{
-        delay(mockDelay+1000)
+    suspend fun getAvailableBooks(): List<Book> {
+        delay(mockDelay + 1000)
         return books.filter { it.isAvailable }
     }
 
-    suspend fun getUniqueAuthors(): Set<String>{
-        delay(mockDelay+100)
+    suspend fun getUniqueAuthors(): Set<String> {
+        delay(mockDelay + 100)
         return books.groupBy { it.author }.keys
     }
 
@@ -216,8 +226,8 @@ object Library {
         }
     }
 
-   fun borrowBook(title: String): Boolean {
-       Log.d("mydebug", "borrowBook: ")
+    fun borrowBook(title: String): Boolean {
+        Log.d("mydebug", "borrowBook: ")
         val bookByTitle = books.find { it.title == title }
 
         if (bookByTitle != null && bookByTitle.totalBookCount - bookByTitle.borrowedCount > 0) {

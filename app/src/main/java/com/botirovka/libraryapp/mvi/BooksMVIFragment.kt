@@ -53,6 +53,7 @@ class BooksMVIFragment : Fragment() {
         setupSearch()
         observeState()
     }
+
     private fun onBorrowButtonClickMVI(book: Book) {
         viewModel.processIntent(BooksIntent.BorrowBook(book))
     }

@@ -15,6 +15,7 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.botirovka.libraryapp.data.Library
 import com.botirovka.libraryapp.databinding.FragmentBookMVVMBinding
@@ -29,10 +30,14 @@ class BooksMVVMFragment : Fragment() {
     private lateinit var booksRecyclerView: RecyclerView
     private lateinit var bookAdapter: BookAdapter
     private lateinit var loadingProgressBar: ProgressBar
+    private lateinit var loadMoreProgressBar: ProgressBar
     private lateinit var errorTextView: TextView
     private lateinit var searchEditText: EditText
     private lateinit var createNewBookButton: Button
     private var isInitialTextChange = true
+    private var isAllBookLoaded = false
+    private var currentBooks: List<Book> = emptyList()
+    private var counter: Int = 0
 
 
     override fun onCreateView(
@@ -48,6 +53,7 @@ class BooksMVVMFragment : Fragment() {
 
         booksRecyclerView = binding.booksRecyclerView
         loadingProgressBar = binding.loadingProgressBar
+        loadMoreProgressBar = binding.loadMoreProgressBar
         errorTextView = binding.errorTextView
         searchEditText = binding.searchEditText
         bookAdapter = BookAdapter(::onBorrowButtonClick)
@@ -56,24 +62,46 @@ class BooksMVVMFragment : Fragment() {
 
 
         observeViewModel()
+        setupInfiniteScroll()
         setupSearch()
 
         createNewBookButton.setOnClickListener {
+            Log.d("mydebugMVVM", "end loadBooksParallel: ${currentBooks.size}")
             createNewBook()
+
         }
     }
 
     private fun createNewBook() {
         val newBook = Book(
             id = 0,
-            title = "New Book Title",
+            title = "New Book Title $counter",
             author = "New Book Author",
             genre = Genres.FANTASY,
             totalBookCount = 10,
             borrowedCount = 0
         )
-        Library.addBook(newBook)
-        booksViewModel.fetchBooks()
+        counter++
+
+        booksViewModel.addNewBook(newBook)
+    }
+
+    private fun setupInfiniteScroll() {
+        booksRecyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                super.onScrolled(recyclerView, dx, dy)
+                val layoutManager = recyclerView.layoutManager as LinearLayoutManager
+                val lastVisibleItemPosition = layoutManager.findLastVisibleItemPosition()
+
+
+                if (lastVisibleItemPosition >= currentBooks.size - 2 && isAllBookLoaded.not() ) {
+                    Log.d("mydebugMVVM", " $isAllBookLoaded")
+                    Log.d("mydebugMVVM", "LAST VISIBLE $lastVisibleItemPosition")
+                    Log.d("mydebugMVVM", "Current last index: ${currentBooks.size - 1}")
+                    booksViewModel.loadMoreBooks(2, currentBooks.size)
+                }
+            }
+        })
     }
 
 
@@ -84,7 +112,9 @@ class BooksMVVMFragment : Fragment() {
     private fun observeViewModel() {
         booksViewModel.booksLiveData.observe(viewLifecycleOwner) { books ->
             bookAdapter.submitList(books)
+            currentBooks = books
             booksRecyclerView.visibility = View.VISIBLE
+
         }
 
         booksViewModel.loadingLiveData.observe(viewLifecycleOwner) { isLoading ->
@@ -92,6 +122,12 @@ class BooksMVVMFragment : Fragment() {
             booksRecyclerView.visibility = if (isLoading) View.GONE else View.VISIBLE
             errorTextView.visibility = View.GONE
         }
+
+        booksViewModel.loadingMoreLiveData.observe(viewLifecycleOwner) { isLoading ->
+            loadMoreProgressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
+            errorTextView.visibility = View.GONE
+        }
+
 
         booksViewModel.errorLiveData.observe(viewLifecycleOwner) { errorMessage ->
             if (errorMessage != null) {
@@ -107,6 +143,15 @@ class BooksMVVMFragment : Fragment() {
             booksViewModel.bookUnavailableFlow.collectLatest { message ->
                 Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
             }
+        }
+
+        lifecycleScope.launch {
+            Log.d("mydebugMVVM", " $isAllBookLoaded before stateFlow")
+            booksViewModel.isAllBookLoadedStateFlow.collectLatest {
+                isAllBookLoaded = it
+                Log.d("mydebugMVVM", " $isAllBookLoaded after stateFlow")
+            }
+
         }
     }
 

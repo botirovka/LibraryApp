@@ -60,6 +60,7 @@ class BooksViewModelMVI : ViewModel() {
                         currentBooks = libraryState.data.map { it.copy() }
                         _state.update { BooksState.Success(libraryState.data) }
                     }
+
                     is State.Error -> _state.update { BooksState.Error(libraryState.message) }
                     else -> _state.update { BooksState.Error("Unexpected error") }
                 }
@@ -91,8 +92,7 @@ class BooksViewModelMVI : ViewModel() {
                 }
                 currentBooks = updatedBooks
                 _state.update { BooksState.Success(updatedBooks) }
-            }
-            else{
+            } else {
                 _state.update { BooksState.BookUnavailable("Book '${book.title}' is not available") }
             }
         }

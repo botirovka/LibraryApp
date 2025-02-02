@@ -17,68 +17,61 @@ object Presenter {
     private val presenterScope = CoroutineScope(Dispatchers.Main)
     private val _bookUnavailableChannel = Channel<String>()
     val bookUnavailableFlow = _bookUnavailableChannel.receiveAsFlow()
-
-    private var lastSearchData: Pair<String, List<Book>> = "" to emptyList()
+    private var lastQuery: String = ""
     private var cachedBooks: List<Book> = emptyList()
-    private var isDataLoaded = false
-
-
 
     fun attachView(view: ShowBookView) {
         this.view = view
-        if (lastSearchData.second.isNotEmpty()){
-            view.showBooks(lastSearchData.second)
-            return
-        }
         if (cachedBooks.isNotEmpty()) {
             view.showBooks(cachedBooks)
-            return
-        } else {
-            isDataLoaded = false
-            fetchBooks()
             return
         }
     }
 
     fun detachView() {
-
         this.view = null
 
     }
 
-    fun fetchBooks() {
+    fun reset() {
+        lastQuery = ""
+        cachedBooks = emptyList()
+    }
 
-            view?.showLoading(true)
-            presenterScope.launch {
-                val state = Library.getAllBooks()
-                withContext(Dispatchers.Main) {
-                    view?.showLoading(false)
-                    when (state) {
-                        is State.Data -> {
-                            cachedBooks = state.data
-                            lastSearchData = "" to emptyList()
-                            view?.showBooks(state.data)
-                        }
-                        is State.Error -> view?.showError(state.message)
-                        else -> view?.showError("Unexpected error")
+    fun fetchBooks() {
+        view?.showLoading(true)
+        presenterScope.launch {
+            val state = Library.getAllBooks()
+            withContext(Dispatchers.Main) {
+                view?.showLoading(false)
+                when (state) {
+                    is State.Data -> {
+                        cachedBooks = state.data
+                        view?.showBooks(state.data)
                     }
+
+                    is State.Error -> view?.showError(state.message)
+                    else -> view?.showError("Unexpected error")
                 }
             }
+        }
     }
 
     fun searchBooks(query: String) {
-        if (lastSearchData.first == query){
-            view?.showBooks(lastSearchData.second)
+        Log.d("mydebug", "LAST: $lastQuery NEW: $query")
+        if (query == lastQuery) {
+            Log.d("mydebug", "setupSearch: cancel")
             return
         }
-
+        lastQuery = query
+        Log.d("mydebug", "setupSearch: search")
         view?.showLoading(true)
         presenterScope.launch {
             val searchResult = Library.searchBooks(query)
+            cachedBooks = searchResult
             withContext(Dispatchers.Main) {
                 view?.showLoading(false)
                 view?.showBooks(searchResult)
-                lastSearchData = query to searchResult
             }
         }
     }
@@ -87,10 +80,10 @@ object Presenter {
         presenterScope.launch {
             val currentBooks = (view as? BooksMVPFragment)?.getCurrentBooks() ?: emptyList()
             val isBorrowed = Library.borrowBook(book.title)
-            if(isBorrowed.not()){
+            if (isBorrowed.not()) {
                 _bookUnavailableChannel.send("Book '${book.title}' is not available")
             }
-                // перенести у вью
+            // перенести у вью
             withContext(Dispatchers.Main) {
                 view?.showBooks(currentBooks)
             }

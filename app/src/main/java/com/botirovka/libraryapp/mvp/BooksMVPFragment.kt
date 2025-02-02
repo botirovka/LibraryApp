@@ -3,6 +3,7 @@ package com.botirovka.libraryapp.mvp
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -29,7 +30,6 @@ class BooksMVPFragment : Fragment(), ShowBookView {
     private lateinit var errorTextView: TextView
     private lateinit var searchEditText: EditText
     private var currentBooks: List<Book> = emptyList()
-    private var isInitialTextChange = true
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -48,15 +48,23 @@ class BooksMVPFragment : Fragment(), ShowBookView {
         searchEditText = binding.searchEditText
         bookAdapter = BookAdapter(::onBorrowButtonClickMVP)
         booksRecyclerView.adapter = bookAdapter
+        Log.d("mydebug", "onViewCreated: ")
+        Log.d("mydebug", (savedInstanceState != null).toString())
 
         Presenter.attachView(this)
-        Presenter.fetchBooks()
+        if (savedInstanceState == null) {
+            Presenter.reset()
+            Presenter.fetchBooks()
+
+        }
         setupSearch()
         observeBookUnavailableFlow()
+
 
     }
 
     override fun onDestroyView() {
+        Log.d("mydebug", "onDestroyView: ")
         super.onDestroyView()
         Presenter.detachView()
     }
@@ -66,8 +74,8 @@ class BooksMVPFragment : Fragment(), ShowBookView {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-
                 val query = s.toString().trim()
+                Log.d("mydebug", "setupSearch: start")
                 Presenter.searchBooks(query)
             }
 
