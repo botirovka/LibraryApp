@@ -11,6 +11,7 @@ import com.botirovka.libraryapp.data.Library
 import com.botirovka.libraryapp.models.Book
 import com.botirovka.libraryapp.models.State
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.channels.Channel
@@ -42,11 +43,12 @@ class BooksViewModel : ViewModel() {
     private val _bookUnavailableChannel = Channel<String>()
     val bookUnavailableFlow = _bookUnavailableChannel.receiveAsFlow()
     private var isDataLoaded = false
-
     private var isLoading: Boolean = false
-    private var currentPage = 0
-    private var currentIndex = 0
+
+    private var lastQuery: String = ""
     private val pageSize = 8
+
+    private var currentJob: Job? = null
 
     init {
         if (isDataLoaded.not()) {
@@ -54,95 +56,81 @@ class BooksViewModel : ViewModel() {
         }
     }
 
-    private fun loadInitialBooks(pagesToLoad: Int = 2) {
+    private fun loadInitialBooks() {
+        Log.d("mydebugPag", "loadInitialBooks: $lastQuery")
         _loadingLiveData.value = true
         _loadingMoreLiveData.value = false
         _errorLiveData.value = null
         viewModelScope.launch {
-            Log.d("mydebug", "start loadInitialBooks: "  + currentPage)
-            val startPage = currentPage
-            currentPage += pagesToLoad
-            loadBooksParallel(startPage until startPage + pagesToLoad)
+            val result = fetchBooksForPage()
+            if(result.isNullOrEmpty()){
+                _errorLiveData.value = "Empty book list"
+                _loadingLiveData.value = false
+            }
+            _booksLiveData.value = result
+            _loadingLiveData.value = false
         }
     }
 
-    fun loadMoreBooks(pagesToLoad: Int = 2, currentIndex: Int = 0) {
-        if (isLoading) return
-
-        if(currentPage == 0){
-        this.currentIndex = currentIndex
+    fun loadMoreBooks(query: String = lastQuery) {
+        if (isLoading && currentJob?.isActive == true) {
+            currentJob?.cancel()
+            loadMoreBooks(query)
+            return
+        }
+        Log.d("mydebugPag", "loadMoreBooks LastQuery: $lastQuery")
+        Log.d("mydebugPag", "loadMoreBooks Query: $query")
+        if(query != lastQuery){
+            _booksLiveData.value = emptyList()
+            _loadingLiveData.value = true
+            _loadingMoreLiveData.value = false
+            _errorLiveData.value = null
+            lastQuery = query
         }
 
-        _loadingLiveData.value = false
-        _loadingMoreLiveData.value = true
-        _errorLiveData.value = null
-
-
+        else{
+            _loadingLiveData.value = false
+            _loadingMoreLiveData.value = true
+            _errorLiveData.value = null
+        }
         isLoading = true
-        val startPage = currentPage
-        currentPage += pagesToLoad
-
-        viewModelScope.launch {
+        currentJob?.cancel()
+        currentJob = viewModelScope.launch {
             try {
-                Log.d("mydebugMVVM", "start load more Books: from $startPage to $currentPage")
-                loadBooksParallel(startPage until startPage + pagesToLoad)
+                val result = fetchBooksForPage(query)
+                if(result.isEmpty()){
+                    _isAllBookLoadedStateFlow.emit(true)
+                    _loadingMoreLiveData.value = false
+                }
+                _booksLiveData.value = _booksLiveData.value?.plus(result)
             } finally {
+                _loadingMoreLiveData.value = false
+                _loadingLiveData.value = false
                 isLoading = false
             }
         }
     }
 
-    private suspend fun loadBooksParallel(pageRange: IntRange) {
-        try {
-            Log.d("mydebugMVVM", "start pageRange: $pageRange")
-            Log.d("mydebugMVVM", "start loadBooksParallel: $currentPage")
-            val booksResult = withContext(Dispatchers.IO) {
-                val deferredPages = pageRange.map { page ->
-                    async {
-                        fetchBooksForPage(page)
-                    }
-                }
-                val results = deferredPages.awaitAll()
-                val emptyCount = results.count { it.isEmpty() }
-                Log.d("mydebugMVVM", "empty: $emptyCount")
-                results.flatten().also {
 
-                    if(it.isEmpty() == true){
-                        currentPage = 0
-                        _isAllBookLoadedStateFlow.emit(true)
-                    }
-
-                    Log.d("mydebugMVVM", "end loadBooksParallel: $currentPage")
-                }
-            }
-            if(_booksLiveData.value.isNullOrEmpty()){
-                _booksLiveData.value = booksResult
-            }
-            else{
-                _booksLiveData.value = _booksLiveData.value!!.plus(booksResult)
-            }
-
-            _loadingLiveData.value = false
-            _loadingMoreLiveData.value = false
-
-        } catch (e: Exception) {
-            _errorLiveData.value = "Unexpected error"
-            _loadingLiveData.value = false
-        }
-    }
-
-    private suspend fun fetchBooksForPage(page: Int): List<Book> {
+    private suspend fun fetchBooksForPage(query: String = ""): List<Book> {
         val randomDelay = Random.nextLong(500, 2000)
         delay(randomDelay)
-        return Library.getBooksPaginated(page, pageSize, currentIndex)
+        return Library.getBooksPaginated(_booksLiveData.value?.size ?: 0, pageSize, query)
     }
 
     fun fetchBooks() {
+        if(_isAllBookLoadedStateFlow.value){
+            viewModelScope.launch {
+                _bookUnavailableChannel.send("All books already loaded")
+            }
+            return
+        }
         _loadingLiveData.value = true
         _errorLiveData.value = null
         viewModelScope.launch {
-            when (val state = Library.getAllBooks()) {
+            when (val state = Library.getAllBooks(lastQuery)) {
                 is State.Data -> {
+                    _isAllBookLoadedStateFlow.emit(true)
                     _booksLiveData.value = state.data
                     _loadingLiveData.value = false
                 }
@@ -197,6 +185,18 @@ class BooksViewModel : ViewModel() {
             } ?: return@launch
 
             _booksLiveData.value = updatedBooks
+        }
+    }
+
+    fun changeBookFavoriteStatus(book: Book) {
+        viewModelScope.launch {
+            val isChanged = Library.addBookToFavorite(book.title)
+            if (isChanged) {
+                _booksLiveData.value = _booksLiveData.value
+
+            } else {
+                _errorLiveData.value = "Unexpected error"
+            }
         }
     }
 

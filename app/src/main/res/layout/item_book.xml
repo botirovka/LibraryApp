@@ -28,10 +28,21 @@
             android:layout_marginStart="16dp"
             android:textSize="18sp"
             android:textStyle="bold"
-            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/favoriteImageView"
             app:layout_constraintStart_toEndOf="@+id/bookImageView"
             app:layout_constraintTop_toTopOf="@+id/bookImageView"
             tools:text="Book Title" />
+
+        <ImageView
+            android:id="@+id/favoriteImageView"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:src="@drawable/borrowed_books_icon"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/titleTextView"
+            app:tint="@color/black"
+            tools:tint="@android:color/holo_orange_light" />
+
 
         <TextView
             android:id="@+id/authorTextView"

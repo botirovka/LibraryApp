@@ -46,7 +46,7 @@ class BooksMVIFragment : Fragment() {
         errorTextView = binding.errorTextView
         searchEditText = binding.searchEditText
 
-        bookAdapter = BookAdapter(::onBorrowButtonClickMVI)
+        bookAdapter = BookAdapter(::onBorrowButtonClickMVI, ::onFavoriteImageViewClickMVI)
 
         booksRecyclerView.adapter = bookAdapter
 
@@ -56,6 +56,10 @@ class BooksMVIFragment : Fragment() {
 
     private fun onBorrowButtonClickMVI(book: Book) {
         viewModel.processIntent(BooksIntent.BorrowBook(book))
+    }
+
+    private fun onFavoriteImageViewClickMVI(book: Book) {
+
     }
 
     private fun setupSearch() {

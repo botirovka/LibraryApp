@@ -9,4 +9,5 @@ interface ShowBookView {
     fun showBookUnavailableMessage(message: String)
     fun onBorrowButtonClick(book: Book)
     fun onReturnButtonClick(book: Book)
+    fun getCurrentBooks(): List<Book>
 }

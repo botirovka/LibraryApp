@@ -26,7 +26,8 @@ object Library {
                 5,
                 10,
                 true,
-                System.currentTimeMillis()
+                System.currentTimeMillis(),
+                true
             ),
             Book(
                 0,
@@ -83,15 +84,15 @@ object Library {
                 System.currentTimeMillis()
             ),
             Book(0, "Test Book", "Without Image", Genres.THRILLER),
-            Book(0, "Test Book1", "Without Image", Genres.THRILLER),
-            Book(0, "Test Book2", "Without Image", Genres.THRILLER),
-            Book(0, "Test Book3", "Without Image", Genres.THRILLER),
-            Book(0, "Test Book4", "Without Image", Genres.THRILLER),
-            Book(0, "Test Book5", "Without Image", Genres.THRILLER),
-            Book(0, "Test Book6", "Without Image", Genres.THRILLER),
-            Book(0, "Test Book7", "Without Image", Genres.THRILLER),
-            Book(0, "Test Book8", "Without Image", Genres.THRILLER),
-            Book(0, "Test Book9", "Without Image", Genres.THRILLER),
+            Book(0, "Test Book", "Without Image", Genres.THRILLER),
+            Book(0, "Test Book", "Without Image", Genres.THRILLER),
+            Book(0, "Test Book", "Without Image", Genres.THRILLER),
+            Book(0, "Test Book", "Without Image", Genres.THRILLER),
+            Book(0, "Test Book", "Without Image", Genres.THRILLER),
+            Book(0, "Test Book", "Without Image", Genres.THRILLER),
+            Book(0, "Test Book", "Without Image", Genres.THRILLER),
+            Book(0, "Test Book", "Without Image", Genres.THRILLER),
+            Book(0, "Test Book", "Without Image", Genres.THRILLER),
             Book(0, "Test Book", "Without Image", Genres.THRILLER),
             Book(0, "Test Book", "Without Image", Genres.THRILLER),
             Book(0, "Test Book", "Without Image", Genres.THRILLER),
@@ -111,16 +112,25 @@ object Library {
         books.forEachIndexed { index, book -> book.id = index }
     }
 
+    fun createNewBook() : Book {
+        return Book(
+            id = books.size,
+            title = "New Book Title ${books.size}",
+            author = "New Book Author",
+            genre = Genres.FANTASY,
+            totalBookCount = 10,
+            borrowedCount = 0
+        )
+    }
+
     //TASK 1.5
-    suspend fun getBooksPaginated(page: Int, pageSize: Int, index: Int = 0): List<Book> {
+    suspend fun getBooksPaginated(startIndex: Int, pageSize: Int, query: String = ""): List<Book> {
         delay(mockDelay)
+        val booksByQuery = searchBooks(query)
+        val endIndex = minOf(startIndex + pageSize, booksByQuery.size)
 
-        val startIndex = index + (page * pageSize)
-
-        val endIndex = minOf(startIndex + pageSize, books.size)
-
-        return if (startIndex < books.size) {
-            books.slice(startIndex until endIndex)
+        return if (startIndex < booksByQuery.size) {
+            booksByQuery.slice(startIndex until endIndex)
         } else {
             emptyList()
         }
@@ -140,8 +150,17 @@ object Library {
     }
 
     //Refactor all expensive functions
-    suspend fun getAllBooks(): State {
+    suspend fun getAllBooks(query: String = ""): State {
         delay(mockDelay + 2000)
+        if(query.isNotEmpty()){
+            val booksByQuery = searchBooks(query)
+            return if (booksByQuery.isNotEmpty()){
+                State.Data(booksByQuery)
+            }
+            else {
+                State.Error("No books found")
+            }
+        }
         return if (books.isNotEmpty()) {
             State.Data(books.toList())
         } else {
@@ -233,6 +252,17 @@ object Library {
         if (bookByTitle != null && bookByTitle.totalBookCount - bookByTitle.borrowedCount > 0) {
             bookByTitle.borrowedCount++
             bookByTitle.lastBorrowedTime = System.currentTimeMillis()
+            return true
+        }
+        return false
+    }
+
+    fun addBookToFavorite(title: String): Boolean {
+        Log.d("mydebug", "borrowBook: ")
+        val bookByTitle = books.find { it.title == title }
+
+        if (bookByTitle != null ) {
+            bookByTitle.isFavorite = bookByTitle.isFavorite.not()
             return true
         }
         return false

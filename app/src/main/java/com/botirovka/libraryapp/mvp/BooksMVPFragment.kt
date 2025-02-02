@@ -46,7 +46,7 @@ class BooksMVPFragment : Fragment(), ShowBookView {
         loadingProgressBar = binding.loadingProgressBar
         errorTextView = binding.errorTextView
         searchEditText = binding.searchEditText
-        bookAdapter = BookAdapter(::onBorrowButtonClickMVP)
+        bookAdapter = BookAdapter(::onBorrowButtonClickMVP, ::onFavoriteImageViewClickMVP)
         booksRecyclerView.adapter = bookAdapter
         Log.d("mydebug", "onViewCreated: ")
         Log.d("mydebug", (savedInstanceState != null).toString())
@@ -95,6 +95,10 @@ class BooksMVPFragment : Fragment(), ShowBookView {
         Presenter.borrowBook(book)
     }
 
+    private fun onFavoriteImageViewClickMVP(book: Book) {
+        Presenter.changeBookFavoriteStatus(book)
+    }
+
     private fun onReturnButtonClickMVP(book: Book) {
 
     }
@@ -130,7 +134,7 @@ class BooksMVPFragment : Fragment(), ShowBookView {
     }
 
 
-    fun getCurrentBooks(): List<Book> {
+    override fun getCurrentBooks(): List<Book> {
         return currentBooks
     }
 }

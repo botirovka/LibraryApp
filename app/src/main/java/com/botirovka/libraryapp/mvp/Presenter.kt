@@ -1,6 +1,7 @@
 package com.botirovka.libraryapp.mvp
 
 import android.util.Log
+import androidx.lifecycle.viewModelScope
 import com.botirovka.libraryapp.data.Library
 import com.botirovka.libraryapp.models.Book
 import com.botirovka.libraryapp.models.State
@@ -78,7 +79,7 @@ object Presenter {
 
     fun borrowBook(book: Book) {
         presenterScope.launch {
-            val currentBooks = (view as? BooksMVPFragment)?.getCurrentBooks() ?: emptyList()
+            val currentBooks = view?.getCurrentBooks() ?: emptyList()
             val isBorrowed = Library.borrowBook(book.title)
             if (isBorrowed.not()) {
                 _bookUnavailableChannel.send("Book '${book.title}' is not available")
@@ -93,7 +94,7 @@ object Presenter {
 
     fun returnBook(book: Book) {
         presenterScope.launch {
-            val currentBooks = (view as? BooksMVPFragment)?.getCurrentBooks() ?: emptyList()
+            val currentBooks = view?.getCurrentBooks() ?: emptyList()
             val updatedBooks = currentBooks.map {
                 if (it.id == book.id && it.borrowedCount > 0) {
                     it.copy(borrowedCount = it.borrowedCount - 1)
@@ -102,6 +103,21 @@ object Presenter {
 
             withContext(Dispatchers.Main) {
                 view?.showBooks(updatedBooks)
+            }
+        }
+    }
+
+    fun changeBookFavoriteStatus(book: Book) {
+        presenterScope.launch {
+            val isChanged = Library.addBookToFavorite(book.title)
+            val currentBooks = view?.getCurrentBooks() ?: emptyList()
+            if (isChanged) {
+                withContext(Dispatchers.Main) {
+                    view?.showBooks(currentBooks)
+                }
+
+            } else {
+                view?.showError("Unexpected error")
             }
         }
     }

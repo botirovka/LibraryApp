@@ -9,6 +9,7 @@ data class Book(
     var borrowedCount: Int = 0,
     var totalBookCount: Int = 0,
     val isAvailable: Boolean = true,
-    var lastBorrowedTime: Long? = null
+    var lastBorrowedTime: Long? = null,
+    var isFavorite: Boolean = false
 
 )

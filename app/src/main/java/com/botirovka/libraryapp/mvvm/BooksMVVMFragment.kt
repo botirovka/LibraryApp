@@ -34,10 +34,13 @@ class BooksMVVMFragment : Fragment() {
     private lateinit var errorTextView: TextView
     private lateinit var searchEditText: EditText
     private lateinit var createNewBookButton: Button
+    private lateinit var fetchAllBookButton: Button
     private var isInitialTextChange = true
     private var isAllBookLoaded = false
+    private var isMoreBookLoading: Boolean = false
     private var currentBooks: List<Book> = emptyList()
-    private var counter: Int = 0
+    private var query : String = ""
+
 
 
     override fun onCreateView(
@@ -56,11 +59,13 @@ class BooksMVVMFragment : Fragment() {
         loadMoreProgressBar = binding.loadMoreProgressBar
         errorTextView = binding.errorTextView
         searchEditText = binding.searchEditText
-        bookAdapter = BookAdapter(::onBorrowButtonClick)
+        bookAdapter = BookAdapter(::onBorrowButtonClick, ::onFavoriteImageViewClick)
         booksRecyclerView.adapter = bookAdapter
         createNewBookButton = binding.createNewBookButton
+        fetchAllBookButton = binding.fetchAllBookButton
 
-
+        query = binding.searchEditText.text.toString().trim()
+        Log.d("mydebugPag", "query from editText: $query")
         observeViewModel()
         setupInfiniteScroll()
         setupSearch()
@@ -68,22 +73,25 @@ class BooksMVVMFragment : Fragment() {
         createNewBookButton.setOnClickListener {
             Log.d("mydebugMVVM", "end loadBooksParallel: ${currentBooks.size}")
             createNewBook()
-
         }
+
+        fetchAllBookButton.setOnClickListener {
+            Log.d("mydebugMVVM", "start fetch all books")
+            booksViewModel.fetchBooks()
+        }
+
+
     }
 
     private fun createNewBook() {
-        val newBook = Book(
-            id = 0,
-            title = "New Book Title $counter",
-            author = "New Book Author",
-            genre = Genres.FANTASY,
-            totalBookCount = 10,
-            borrowedCount = 0
-        )
-        counter++
-
+        val newBook = Library.createNewBook()
         booksViewModel.addNewBook(newBook)
+        val layoutManager = booksRecyclerView.layoutManager as LinearLayoutManager
+        val lastVisibleItemPosition = layoutManager.findLastVisibleItemPosition()
+        if (lastVisibleItemPosition >= currentBooks.size - 2 && isMoreBookLoading.not()){
+            Log.d("mydebugPag", "loadBooks from createNewBook: $query")
+                booksViewModel.loadMoreBooks()
+        }
     }
 
     private fun setupInfiniteScroll() {
@@ -94,11 +102,13 @@ class BooksMVVMFragment : Fragment() {
                 val lastVisibleItemPosition = layoutManager.findLastVisibleItemPosition()
 
 
-                if (lastVisibleItemPosition >= currentBooks.size - 2 && isAllBookLoaded.not() ) {
+                if (lastVisibleItemPosition == currentBooks.size - 1 && isAllBookLoaded.not() && isMoreBookLoading.not()) {
                     Log.d("mydebugMVVM", " $isAllBookLoaded")
                     Log.d("mydebugMVVM", "LAST VISIBLE $lastVisibleItemPosition")
                     Log.d("mydebugMVVM", "Current last index: ${currentBooks.size - 1}")
-                    booksViewModel.loadMoreBooks(2, currentBooks.size)
+                    Log.d("mydebugPag", "loadBooks from scroll: $query")
+                    booksViewModel.loadMoreBooks()
+
                 }
             }
         })
@@ -107,6 +117,10 @@ class BooksMVVMFragment : Fragment() {
 
     private fun onBorrowButtonClick(book: Book) {
         booksViewModel.borrowBook(book)
+    }
+
+    private fun onFavoriteImageViewClick(book: Book) {
+        booksViewModel.changeBookFavoriteStatus(book)
     }
 
     private fun observeViewModel() {
@@ -125,6 +139,7 @@ class BooksMVVMFragment : Fragment() {
 
         booksViewModel.loadingMoreLiveData.observe(viewLifecycleOwner) { isLoading ->
             loadMoreProgressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
+            isMoreBookLoading = isLoading
             errorTextView.visibility = View.GONE
         }
 
@@ -164,8 +179,9 @@ class BooksMVVMFragment : Fragment() {
                     isInitialTextChange = false
                     return
                 }
-                val query = s.toString().trim()
-                booksViewModel.searchBooks(query)
+                query = s.toString().trim()
+                Log.d("mydebugPag", "loadBooks from search: $query")
+                booksViewModel.loadMoreBooks(query)
             }
 
             override fun afterTextChanged(editable: Editable?) {}
