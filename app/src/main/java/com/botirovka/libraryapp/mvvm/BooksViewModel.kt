@@ -25,7 +25,7 @@ import kotlin.random.Random
 
 class BooksViewModel : ViewModel() {
 
-    private val _booksLiveData = MutableLiveData<List<Book>>()
+    private val _booksLiveData = MutableLiveData<List<Book>>(emptyList())
     val booksLiveData: LiveData<List<Book>> get() = _booksLiveData
 
     private val _loadingLiveData = MutableLiveData<Boolean>()
@@ -61,7 +61,7 @@ class BooksViewModel : ViewModel() {
         _loadingLiveData.value = true
         _loadingMoreLiveData.value = false
         _errorLiveData.value = null
-        viewModelScope.launch {
+        currentJob = viewModelScope.launch {
             val result = fetchBooksForPage()
             if(result.isNullOrEmpty()){
                 _errorLiveData.value = "Empty book list"
@@ -73,15 +73,18 @@ class BooksViewModel : ViewModel() {
     }
 
     fun loadMoreBooks(query: String = lastQuery) {
-        if (isLoading && currentJob?.isActive == true) {
-            currentJob?.cancel()
-            loadMoreBooks(query)
-            return
+        if (isLoading) {
+            lastQuery = query
         }
-        Log.d("mydebugPag", "loadMoreBooks LastQuery: $lastQuery")
-        Log.d("mydebugPag", "loadMoreBooks Query: $query")
+        currentJob?.cancel()
+        Log.d("mydebugMVVM2", "loadMoreBooks LastQuery: $lastQuery")
+        Log.d("mydebugMVVM2", "loadMoreBooks Query: $query")
         if(query != lastQuery){
+            currentJob?.cancel()
             _booksLiveData.value = emptyList()
+            viewModelScope.launch {
+                _isAllBookLoadedStateFlow.emit(false)
+            }
             _loadingLiveData.value = true
             _loadingMoreLiveData.value = false
             _errorLiveData.value = null
@@ -96,18 +99,20 @@ class BooksViewModel : ViewModel() {
         isLoading = true
         currentJob?.cancel()
         currentJob = viewModelScope.launch {
-            try {
                 val result = fetchBooksForPage(query)
                 if(result.isEmpty()){
                     _isAllBookLoadedStateFlow.emit(true)
                     _loadingMoreLiveData.value = false
                 }
+                 if(currentJob?.isCancelled == true || query != lastQuery){
+                     loadMoreBooks(lastQuery)
+                     return@launch
+                 }
                 _booksLiveData.value = _booksLiveData.value?.plus(result)
-            } finally {
                 _loadingMoreLiveData.value = false
                 _loadingLiveData.value = false
                 isLoading = false
-            }
+
         }
     }
 
@@ -119,7 +124,13 @@ class BooksViewModel : ViewModel() {
     }
 
     fun fetchBooks() {
+        val currentLastQuery = lastQuery
+        if(loadingLiveData.value == true){
+            Log.d("mydebugMVVM2", "Loading true: ")
+            Log.d("mydebugMVVM2", "last query: $lastQuery")
+        }
         if(_isAllBookLoadedStateFlow.value){
+            Log.d("mydebugMVVM2", "fetchBooks: ")
             viewModelScope.launch {
                 _bookUnavailableChannel.send("All books already loaded")
             }
@@ -127,12 +138,19 @@ class BooksViewModel : ViewModel() {
         }
         _loadingLiveData.value = true
         _errorLiveData.value = null
+
         viewModelScope.launch {
             when (val state = Library.getAllBooks(lastQuery)) {
+
                 is State.Data -> {
+                    if(currentLastQuery == lastQuery){
                     _isAllBookLoadedStateFlow.emit(true)
                     _booksLiveData.value = state.data
                     _loadingLiveData.value = false
+                    }
+                    else{
+                        Log.d("mydebugMVVM2", "Query not equal")
+                    }
                 }
                 is State.Error -> {
                     _errorLiveData.value = state.message
@@ -190,7 +208,7 @@ class BooksViewModel : ViewModel() {
 
     fun changeBookFavoriteStatus(book: Book) {
         viewModelScope.launch {
-            val isChanged = Library.addBookToFavorite(book.title)
+            val isChanged = Library.addBookToFavorite(book.id)
             if (isChanged) {
                 _booksLiveData.value = _booksLiveData.value
 

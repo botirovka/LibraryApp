@@ -21,6 +21,8 @@ import com.botirovka.libraryapp.data.Library
 import com.botirovka.libraryapp.databinding.FragmentBookMVVMBinding
 import com.botirovka.libraryapp.models.Book
 import com.botirovka.libraryapp.models.Genres
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
@@ -40,6 +42,8 @@ class BooksMVVMFragment : Fragment() {
     private var isMoreBookLoading: Boolean = false
     private var currentBooks: List<Book> = emptyList()
     private var query : String = ""
+    private var isLoading: Boolean = false
+
 
 
 
@@ -64,8 +68,6 @@ class BooksMVVMFragment : Fragment() {
         createNewBookButton = binding.createNewBookButton
         fetchAllBookButton = binding.fetchAllBookButton
 
-        query = binding.searchEditText.text.toString().trim()
-        Log.d("mydebugPag", "query from editText: $query")
         observeViewModel()
         setupInfiniteScroll()
         setupSearch()
@@ -77,7 +79,8 @@ class BooksMVVMFragment : Fragment() {
 
         fetchAllBookButton.setOnClickListener {
             Log.d("mydebugMVVM", "start fetch all books")
-            booksViewModel.fetchBooks()
+                booksViewModel.fetchBooks()
+
         }
 
 
@@ -88,7 +91,7 @@ class BooksMVVMFragment : Fragment() {
         booksViewModel.addNewBook(newBook)
         val layoutManager = booksRecyclerView.layoutManager as LinearLayoutManager
         val lastVisibleItemPosition = layoutManager.findLastVisibleItemPosition()
-        if (lastVisibleItemPosition >= currentBooks.size - 2 && isMoreBookLoading.not()){
+        if (lastVisibleItemPosition >= currentBooks.size - 2 && isMoreBookLoading.not() && isLoading.not()){
             Log.d("mydebugPag", "loadBooks from createNewBook: $query")
                 booksViewModel.loadMoreBooks()
         }
@@ -132,14 +135,15 @@ class BooksMVVMFragment : Fragment() {
         }
 
         booksViewModel.loadingLiveData.observe(viewLifecycleOwner) { isLoading ->
+            this.isLoading = isLoading
             loadingProgressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
             booksRecyclerView.visibility = if (isLoading) View.GONE else View.VISIBLE
             errorTextView.visibility = View.GONE
         }
 
         booksViewModel.loadingMoreLiveData.observe(viewLifecycleOwner) { isLoading ->
+            this.isMoreBookLoading = isLoading
             loadMoreProgressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
-            isMoreBookLoading = isLoading
             errorTextView.visibility = View.GONE
         }
 

@@ -257,9 +257,9 @@ object Library {
         return false
     }
 
-    fun addBookToFavorite(title: String): Boolean {
+    fun addBookToFavorite(id: Int): Boolean {
         Log.d("mydebug", "borrowBook: ")
-        val bookByTitle = books.find { it.title == title }
+        val bookByTitle = books.find { it.id == id }
 
         if (bookByTitle != null ) {
             bookByTitle.isFavorite = bookByTitle.isFavorite.not()
