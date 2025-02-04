@@ -17,12 +17,8 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.botirovka.libraryapp.data.Library
 import com.botirovka.libraryapp.databinding.FragmentBookMVVMBinding
-import com.botirovka.libraryapp.models.Book
-import com.botirovka.libraryapp.models.Genres
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
+import com.example.domain.model.Book
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
@@ -87,7 +83,7 @@ class BooksMVVMFragment : Fragment() {
     }
 
     private fun createNewBook() {
-        val newBook = Library.createNewBook()
+        val newBook = com.example.data.Library.createNewBook()
         booksViewModel.addNewBook(newBook)
         val layoutManager = booksRecyclerView.layoutManager as LinearLayoutManager
         val lastVisibleItemPosition = layoutManager.findLastVisibleItemPosition()

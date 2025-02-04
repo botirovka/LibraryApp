@@ -1,14 +1,11 @@
-package com.botirovka.libraryapp.data
+package com.example.data
 
 import android.util.Log
-import com.botirovka.libraryapp.models.Book
-import com.botirovka.libraryapp.models.Extensions.Companion.groupByGenre
-import com.botirovka.libraryapp.models.Extensions.Companion.sortedByTitleAvailableFirstAscending
-import com.botirovka.libraryapp.models.Genres
-import com.botirovka.libraryapp.models.State
-import kotlinx.coroutines.Delay
+import com.example.domain.extensions.Extensions.Companion.groupByGenre
+import com.example.domain.extensions.Extensions.Companion.sortedByTitleAvailableFirstAscending
+import com.example.domain.model.Book
+
 import kotlinx.coroutines.delay
-import java.time.LocalTime
 
 object Library {
     private val books: MutableList<Book>
@@ -21,7 +18,7 @@ object Library {
                 0,
                 "Harry Potter and the Sorcerer's Stone",
                 "J.K. Rowling",
-                Genres.FANTASY,
+                com.example.domain.model.Genres.FANTASY,
                 "https://i.imgur.com/bEe75Ri.png",
                 5,
                 10,
@@ -33,14 +30,14 @@ object Library {
                 0,
                 "The Hobbit",
                 "J.R.R. Tolkien",
-                Genres.FANTASY,
+                com.example.domain.model.Genres.FANTASY,
                 "https://i.imgur.com/mJmmCUv.png"
             ),
             Book(
                 0,
                 "The Girl with the Dragon Tattoo",
                 "Stieg Larsson",
-                Genres.THRILLER,
+                com.example.domain.model.Genres.THRILLER,
                 "https://i.imgur.com/hIkr1pP.png",
                 2,
                 12
@@ -49,7 +46,7 @@ object Library {
                 0,
                 "Dune",
                 "Frank Herbert",
-                Genres.SCIENCE_FICTION,
+                com.example.domain.model.Genres.SCIENCE_FICTION,
                 "https://i.imgur.com/Nn1UyoW.png",
                 0,
                 9
@@ -58,7 +55,7 @@ object Library {
                 0,
                 "Treasure Island",
                 "Robert Louis Stevenson",
-                Genres.ADVENTURE_FICTION,
+                com.example.domain.model.Genres.ADVENTURE_FICTION,
                 "https://imgur.com/tqvpAMm.png",
                 0,
                 5
@@ -67,7 +64,7 @@ object Library {
                 0,
                 "Pride and Prejudice",
                 "Jane Austen",
-                Genres.CLASSIC,
+                com.example.domain.model.Genres.CLASSIC,
                 "https://i.imgur.com/oh0bS0P.png",
                 0,
                 3
@@ -76,38 +73,163 @@ object Library {
                 0,
                 "Harry Potter and The Order of the Fenix",
                 "J.K. Rowling",
-                Genres.FANTASY,
+                com.example.domain.model.Genres.FANTASY,
                 "https://imgur.com/izIUWtX.png",
                 5,
                 10,
                 true,
                 System.currentTimeMillis()
             ),
-            Book(0, "Test Book", "Without Image", Genres.THRILLER),
-            Book(0, "Test Book", "Without Image", Genres.THRILLER),
-            Book(0, "Test Book", "Without Image", Genres.THRILLER),
-            Book(0, "Test Book", "Without Image", Genres.THRILLER),
-            Book(0, "Test Book", "Without Image", Genres.THRILLER),
-            Book(0, "Test Book", "Without Image", Genres.THRILLER),
-            Book(0, "Test Book", "Without Image", Genres.THRILLER),
-            Book(0, "Test Book", "Without Image", Genres.THRILLER),
-            Book(0, "Test Book", "Without Image", Genres.THRILLER),
-            Book(0, "Test Book", "Without Image", Genres.THRILLER),
-            Book(0, "Test Book", "Without Image", Genres.THRILLER),
-            Book(0, "Test Book", "Without Image", Genres.THRILLER),
-            Book(0, "Test Book", "Without Image", Genres.THRILLER),
-            Book(0, "Test Book", "Without Image", Genres.THRILLER),
-            Book(0, "Test Book", "Without Image", Genres.THRILLER),
-            Book(0, "Test Book", "Without Image", Genres.THRILLER),
-            Book(0, "Test Book", "Without Image", Genres.THRILLER),
-            Book(0, "Test Book", "Without Image", Genres.THRILLER),
-            Book(0, "Test Book", "Without Image", Genres.THRILLER),
-            Book(0, "Test Book", "Without Image", Genres.THRILLER),
-            Book(0, "Test Book", "Without Image", Genres.THRILLER),
-            Book(0, "Test Book", "Without Image", Genres.THRILLER),
-            Book(0, "Test Book", "Without Image", Genres.THRILLER),
-            Book(0, "Test Book", "Without Image", Genres.THRILLER),
-            Book(0, "Test Book", "Without Image", Genres.THRILLER)
+            Book(
+                0,
+                "Test Book",
+                "Without Image",
+                com.example.domain.model.Genres.THRILLER
+            ),
+            Book(
+                0,
+                "Test Book",
+                "Without Image",
+                com.example.domain.model.Genres.THRILLER
+            ),
+            Book(
+                0,
+                "Test Book",
+                "Without Image",
+                com.example.domain.model.Genres.THRILLER
+            ),
+            Book(
+                0,
+                "Test Book",
+                "Without Image",
+                com.example.domain.model.Genres.THRILLER
+            ),
+            Book(
+                0,
+                "Test Book",
+                "Without Image",
+                com.example.domain.model.Genres.THRILLER
+            ),
+            Book(
+                0,
+                "Test Book",
+                "Without Image",
+                com.example.domain.model.Genres.THRILLER
+            ),
+            Book(
+                0,
+                "Test Book",
+                "Without Image",
+                com.example.domain.model.Genres.THRILLER
+            ),
+            Book(
+                0,
+                "Test Book",
+                "Without Image",
+                com.example.domain.model.Genres.THRILLER
+            ),
+            Book(
+                0,
+                "Test Book",
+                "Without Image",
+                com.example.domain.model.Genres.THRILLER
+            ),
+            Book(
+                0,
+                "Test Book",
+                "Without Image",
+                com.example.domain.model.Genres.THRILLER
+            ),
+            Book(
+                0,
+                "Test Book",
+                "Without Image",
+                com.example.domain.model.Genres.THRILLER
+            ),
+            Book(
+                0,
+                "Test Book",
+                "Without Image",
+                com.example.domain.model.Genres.THRILLER
+            ),
+            Book(
+                0,
+                "Test Book",
+                "Without Image",
+                com.example.domain.model.Genres.THRILLER
+            ),
+            Book(
+                0,
+                "Test Book",
+                "Without Image",
+                com.example.domain.model.Genres.THRILLER
+            ),
+            Book(
+                0,
+                "Test Book",
+                "Without Image",
+                com.example.domain.model.Genres.THRILLER
+            ),
+            Book(
+                0,
+                "Test Book",
+                "Without Image",
+                com.example.domain.model.Genres.THRILLER
+            ),
+            Book(
+                0,
+                "Test Book",
+                "Without Image",
+                com.example.domain.model.Genres.THRILLER
+            ),
+            Book(
+                0,
+                "Test Book",
+                "Without Image",
+                com.example.domain.model.Genres.THRILLER
+            ),
+            Book(
+                0,
+                "Test Book",
+                "Without Image",
+                com.example.domain.model.Genres.THRILLER
+            ),
+            Book(
+                0,
+                "Test Book",
+                "Without Image",
+                com.example.domain.model.Genres.THRILLER
+            ),
+            Book(
+                0,
+                "Test Book",
+                "Without Image",
+                com.example.domain.model.Genres.THRILLER
+            ),
+            Book(
+                0,
+                "Test Book",
+                "Without Image",
+                com.example.domain.model.Genres.THRILLER
+            ),
+            Book(
+                0,
+                "Test Book",
+                "Without Image",
+                com.example.domain.model.Genres.THRILLER
+            ),
+            Book(
+                0,
+                "Test Book",
+                "Without Image",
+                com.example.domain.model.Genres.THRILLER
+            ),
+            Book(
+                0,
+                "Test Book",
+                "Without Image",
+                com.example.domain.model.Genres.THRILLER
+            )
         )
         books.forEachIndexed { index, book -> book.id = index }
     }
@@ -117,7 +239,7 @@ object Library {
             id = books.size,
             title = "New Book Title ${books.size}",
             author = "New Book Author",
-            genre = Genres.FANTASY,
+            genre = com.example.domain.model.Genres.FANTASY,
             totalBookCount = 10,
             borrowedCount = 0
         )
@@ -150,34 +272,34 @@ object Library {
     }
 
     //Refactor all expensive functions
-    suspend fun getAllBooks(query: String = ""): State {
+    suspend fun getAllBooks(query: String = ""): com.example.domain.model.State {
         delay(mockDelay + 2000)
         if(query.isNotEmpty()){
             val booksByQuery = searchBooks(query)
             return if (booksByQuery.isNotEmpty()){
-                State.Data(booksByQuery)
+                com.example.domain.model.State.Data(booksByQuery)
             }
             else {
-                State.Error("No books found")
+                com.example.domain.model.State.Error("No books found")
             }
         }
         return if (books.isNotEmpty()) {
-            State.Data(books.toList())
+            com.example.domain.model.State.Data(books.toList())
         } else {
-            State.Error("No books found")
+            com.example.domain.model.State.Error("No books found")
         }
     }
 
-    suspend fun getAllBorrowedBooks(): State {
+    suspend fun getAllBorrowedBooks(): com.example.domain.model.State {
         delay(mockDelay)
         return if (books.isNotEmpty()) {
-            State.Data(books.filter { it.borrowedCount > 0 }.toList())
+            com.example.domain.model.State.Data(books.filter { it.borrowedCount > 0 }.toList())
         } else {
-            State.Error("No books found")
+            com.example.domain.model.State.Error("No books found")
         }
     }
 
-    suspend fun getAllBooksByGenre(): Map<Genres, List<Book>> {
+    suspend fun getAllBooksByGenre(): Map<com.example.domain.model.Genres, List<Book>> {
         return books.groupByGenre()
     }
 
@@ -185,7 +307,7 @@ object Library {
         return books.sortedByTitleAvailableFirstAscending()
     }
 
-    suspend fun countBooksByGenre(): Map<Genres, Int> {
+    suspend fun countBooksByGenre(): Map<com.example.domain.model.Genres, Int> {
         return books.groupBy { it.genre }.mapValues { it.value.size }
     }
 
@@ -200,7 +322,7 @@ object Library {
             .take(topCount)
     }
 
-    suspend fun getBorrowedBooksSummaryByGenre(): Map<Genres, Int> {
+    suspend fun getBorrowedBooksSummaryByGenre(): Map<com.example.domain.model.Genres, Int> {
         delay(mockDelay)
         return books
             .filter { it.borrowedCount > 0 }

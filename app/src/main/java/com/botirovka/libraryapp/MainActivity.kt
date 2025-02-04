@@ -7,12 +7,10 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.fragment.app.Fragment
-import com.botirovka.libraryapp.data.Library
 import com.botirovka.libraryapp.databinding.ActivityMainBinding
-import com.botirovka.libraryapp.models.Extensions.Companion.printPretty
-import com.botirovka.libraryapp.mvp.BooksMVPFragment
-import com.botirovka.libraryapp.mvvm.BooksMVIFragment
+import com.example.domain.extensions.Extensions.Companion.printPretty
 import com.botirovka.libraryapp.mvvm.BooksMVVMFragment
+import com.example.data.Repo
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -39,6 +37,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun doOnBackground(){
+        Repo.doSomeTest()
         Log.d("coroutines", "doOnBackground")
         //testAllCoroutinesAtTheSameTime()
     }
@@ -50,41 +49,41 @@ class MainActivity : AppCompatActivity() {
 
                 val getAllBooksDeferred = async {
                     Log.d("coroutines", "get all books started")
-                    Library.getAllBooks().also {
+                    com.example.data.Library.getAllBooks().also {
                         Log.d("coroutines", "get all books ended")
                     }
 
                 }
                 val getAllBooksByGenreDeferred = async {
                     Log.d("coroutines", "get all books By genre started")
-                    Library.getAllBooksByGenre().also {
+                    com.example.data.Library.getAllBooksByGenre().also {
                         Log.d("coroutines", "get all books By genre ended")
                     }
                 }
                 val getAvailableBooksDeferred = async {
                     Log.d("coroutines", "get available books started")
-                    Library.getAvailableBooks().also {
+                    com.example.data.Library.getAvailableBooks().also {
                         Log.d("coroutines", "get available books ended")
                     }
                 }
                 val getUniqueAuthorsDeferred = async {
                     Log.d("coroutines", "get unique authors started")
-                    Library.getUniqueAuthors()
+                    com.example.data.Library.getUniqueAuthors()
                     Log.d("coroutines", "get unique authors ended")
                 }
                 val getMostPopularBooksDeferred = async {
                     Log.d("coroutines", "get most popular books started")
-                    Library.getMostPopularBooks(3).also {
+                    com.example.data.Library.getMostPopularBooks(3).also {
                         Log.d("coroutines", "get most popular books ended")
                     } }
                 val getBorrowedBooksSummaryDeferred = async {
                     Log.d("coroutines", "get BorrowedBooksSummary started")
-                    Library.getBorrowedBooksSummaryByGenre().also {
+                    com.example.data.Library.getBorrowedBooksSummaryByGenre().also {
                         Log.d("coroutines", "get BorrowedBooksSummary ended")
                     } }
                 val getTrendingAuthorDeferred = async {
                     Log.d("coroutines", "get Trending Author started")
-                    Library.getTrendingAuthor().also {
+                    com.example.data.Library.getTrendingAuthor().also {
                         Log.d("coroutines", "get Trending Author ended")
                     } }
 
@@ -121,9 +120,9 @@ class MainActivity : AppCompatActivity() {
         bottomNav = binding.bottomNav
         bottomNav.setOnItemSelectedListener { item ->
             when (item.itemId) {
-                R.id.add_book -> replaceFragment(BooksMVIFragment())
+                R.id.add_book -> replaceFragment(BooksMVVMFragment())
                 R.id.books -> replaceFragment(BooksMVVMFragment())
-                R.id.borrowed_books -> replaceFragment(BooksMVPFragment())
+                R.id.borrowed_books -> replaceFragment(BooksMVVMFragment())
                 else -> false
             }
         }

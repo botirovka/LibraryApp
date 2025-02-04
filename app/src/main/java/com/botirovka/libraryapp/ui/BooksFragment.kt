@@ -11,11 +11,8 @@ import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.botirovka.libraryapp.R
-import com.botirovka.libraryapp.data.Library
-import com.botirovka.libraryapp.models.Book
-import com.botirovka.libraryapp.models.State
+import com.example.domain.model.Book
 import com.botirovka.libraryapp.ui.adapters.BooksAdapter
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
@@ -121,9 +118,9 @@ class BooksFragment : Fragment() {
         delay(randomDelay)
 
         return if (isBorrowedFragment) {
-            Library.getBorrowedBooksPaginated(page, pageSize)
+            com.example.data.Library.getBorrowedBooksPaginated(page, pageSize)
         } else {
-            Library.getBooksPaginated(page, pageSize)
+            com.example.data.Library.getBooksPaginated(page, pageSize)
         }
     }
 
@@ -144,7 +141,7 @@ class BooksFragment : Fragment() {
     private fun handleBookBorrow(book: Book) {
         if (book.totalBookCount > 0) {
             lifecycleScope.launch(Dispatchers.IO) {
-                val result = Library.borrowBook(book.title)
+                val result = com.example.data.Library.borrowBook(book.title)
                 withContext(Dispatchers.Main) {
                     if (result) {
                         booksAdapter.notifyDataSetChanged()

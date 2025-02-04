@@ -8,12 +8,10 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
-import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.botirovka.libraryapp.R
-import com.botirovka.libraryapp.data.Library
-import com.botirovka.libraryapp.models.Book
+import com.example.domain.model.Book
 
 import com.bumptech.glide.Glide
 

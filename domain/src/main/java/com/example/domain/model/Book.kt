@@ -1,4 +1,4 @@
-package com.botirovka.libraryapp.models
+package com.example.domain.model
 
 data class Book(
     var id: Int = 0,
