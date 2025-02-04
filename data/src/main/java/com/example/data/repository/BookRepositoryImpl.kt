@@ -2,6 +2,7 @@ package com.example.data.repository
 
 
 import com.example.data.Library
+import com.example.data.model.toAddBookRequest
 import com.example.domain.model.Book
 import com.example.domain.model.Genres
 import com.example.domain.model.State
@@ -61,7 +62,7 @@ class BookRepositoryImpl : BookRepository {
     }
 
     override fun addBook(book: Book): Int {
-        return Library.addBook(book)
+        return Library.addBook(book.toAddBookRequest())
     }
 
     override suspend fun searchBooks(request: String): List<Book> {

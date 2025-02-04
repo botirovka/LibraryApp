@@ -1,11 +1,13 @@
 package com.example.data
 
 import android.util.Log
+import com.example.data.model.AddBookRequest
 import com.example.domain.extensions.Extensions.Companion.groupByGenre
 import com.example.domain.extensions.Extensions.Companion.sortedByTitleAvailableFirstAscending
 import com.example.domain.model.Book
 
 import kotlinx.coroutines.delay
+import kotlin.random.Random
 
 object Library {
     private val books: MutableList<Book>
@@ -353,8 +355,19 @@ object Library {
     }
 
 
-    fun addBook(book: Book): Int {
-        books.add(book)
+    fun addBook(book: AddBookRequest): Int {
+        books.add(
+            Book(
+                id = Random.nextInt(),
+                title = book.title,
+                author = book.author,
+                genre = book.genre,
+                image = book.image,
+                borrowedCount = book.borrowedCount,
+                totalBookCount = book.totalBookCount,
+                lastBorrowedTime = book.lastBorrowedTime?.toLong(),
+            )
+        )
         return books.lastIndex
     }
 
