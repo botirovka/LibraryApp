@@ -75,6 +75,7 @@ class BooksViewModel @Inject constructor(
         _loadingLiveData.value = true
         _loadingMoreLiveData.value = false
         _errorLiveData.value = null
+
         currentJob = viewModelScope.launch {
             val result = fetchBooksForPage()
             if(result.isNullOrEmpty()){
@@ -142,6 +143,7 @@ class BooksViewModel @Inject constructor(
             }
             return
         }
+        currentJob?.cancel()
         _loadingLiveData.value = true
         _errorLiveData.value = null
 
