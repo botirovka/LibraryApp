@@ -1,11 +1,14 @@
 package com.example.domain.usecase
 
-import com.example.domain.DIReplacer
 import com.example.domain.model.State
+import com.example.domain.repository.BookRepository
+import javax.inject.Inject
 
 
-class GetAllBooksUseCase() {
+class GetAllBooksUseCase @Inject constructor(
+    private val bookRepository: BookRepository
+) {
     suspend operator fun invoke(query: String = ""): State {
-        return DIReplacer.bookRepository.getAllBooks(query)
+        return bookRepository.getAllBooks(query)
     }
 }

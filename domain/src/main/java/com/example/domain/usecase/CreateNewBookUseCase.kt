@@ -4,11 +4,10 @@ import com.example.domain.model.Book
 import com.example.domain.repository.BookRepository
 import javax.inject.Inject
 
-
-class SearchBooksUseCase @Inject constructor(
+class CreateNewBookUseCase @Inject constructor(
     private val bookRepository: BookRepository
 ) {
-    suspend operator fun invoke(query: String): List<Book> {
-        return bookRepository.searchBooks(query)
+    operator fun invoke(): Book {
+        return bookRepository.createNewBook()
     }
 }

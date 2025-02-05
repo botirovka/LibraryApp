@@ -10,13 +10,14 @@ import androidx.fragment.app.Fragment
 import com.botirovka.libraryapp.databinding.ActivityMainBinding
 import com.example.domain.extensions.Extensions.Companion.printPretty
 import com.botirovka.libraryapp.mvvm.BooksMVVMFragment
-import com.example.data.Repo
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 
+@AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
     private lateinit var bottomNav: BottomNavigationView
@@ -37,7 +38,6 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun doOnBackground(){
-        Repo.doSomeTest()
         Log.d("coroutines", "doOnBackground")
         //testAllCoroutinesAtTheSameTime()
     }

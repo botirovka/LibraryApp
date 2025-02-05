@@ -19,9 +19,11 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.botirovka.libraryapp.databinding.FragmentBookMVVMBinding
 import com.example.domain.model.Book
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
+@AndroidEntryPoint
 class BooksMVVMFragment : Fragment() {
     private lateinit var binding: FragmentBookMVVMBinding
     private val booksViewModel by viewModels<BooksViewModel>()
@@ -83,8 +85,7 @@ class BooksMVVMFragment : Fragment() {
     }
 
     private fun createNewBook() {
-        val newBook = com.example.data.Library.createNewBook()
-        booksViewModel.addNewBook(newBook)
+        booksViewModel.createNewBook()
         val layoutManager = booksRecyclerView.layoutManager as LinearLayoutManager
         val lastVisibleItemPosition = layoutManager.findLastVisibleItemPosition()
         if (lastVisibleItemPosition >= currentBooks.size - 2 && isMoreBookLoading.not() && isLoading.not()){

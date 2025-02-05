@@ -1,10 +1,13 @@
 package com.example.domain.usecase
 
-import com.example.domain.DIReplacer
+import com.example.domain.repository.BookRepository
+import javax.inject.Inject
 
 
-class ToggleFavoriteBookUseCase() {
+class ToggleFavoriteBookUseCase @Inject constructor(
+    private val bookRepository: BookRepository
+) {
     operator fun invoke(id: Int): Boolean {
-        return DIReplacer.bookRepository.addBookToFavorite(id)
+        return bookRepository.addBookToFavorite(id)
     }
 }

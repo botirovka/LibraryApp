@@ -2,6 +2,7 @@ package com.example.data.model
 
 import com.example.domain.model.Book
 import com.example.domain.model.Genres
+import kotlin.random.Random
 
 data class AddBookRequest (
     val title: String,
@@ -17,4 +18,15 @@ data class AddBookRequest (
 
 fun Book.toAddBookRequest() = AddBookRequest(
     title, author, genre, image, borrowedCount, totalBookCount, isAvailable
+)
+
+fun AddBookRequest.toBook() = Book(
+    id = Random.nextInt(),
+    title = title,
+    author = author,
+    genre = genre,
+    image = image,
+    borrowedCount = borrowedCount,
+    totalBookCount = totalBookCount,
+    lastBorrowedTime = lastBorrowedTime?.toLong(),
 )

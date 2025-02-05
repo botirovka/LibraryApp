@@ -11,17 +11,30 @@ import com.example.domain.model.Book
 import com.example.domain.model.State
 import com.example.domain.usecase.AddNewBookUseCase
 import com.example.domain.usecase.BorrowBookUseCase
+import com.example.domain.usecase.CreateNewBookUseCase
 import com.example.domain.usecase.GetAllBooksUseCase
 import com.example.domain.usecase.GetPaginatedBooksUseCase
 import com.example.domain.usecase.SearchBooksUseCase
 import com.example.domain.usecase.ToggleFavoriteBookUseCase
+import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class BooksViewModel : ViewModel() {
+@HiltViewModel
+class BooksViewModel @Inject constructor(
+    private val getPaginatedBooksUseCase: GetPaginatedBooksUseCase,
+    private val getAllBooksUseCase: GetAllBooksUseCase,
+    private val borrowBookUseCase: BorrowBookUseCase,
+    private val toggleFavoriteBookUseCase: ToggleFavoriteBookUseCase,
+    private val addNewBookUseCase: AddNewBookUseCase,
+    private val searchBooksUseCase: SearchBooksUseCase,
+    private val createNewBookUseCase: CreateNewBookUseCase
+) : ViewModel() {
 
     private val _booksLiveData = MutableLiveData<List<Book>>(emptyList())
     val booksLiveData: LiveData<List<Book>> get() = _booksLiveData
@@ -46,12 +59,9 @@ class BooksViewModel : ViewModel() {
     private var lastQuery: String = ""
     private val pageSize = 8
 
-    private val getPaginatedBooksUseCase = GetPaginatedBooksUseCase()
-    private val getAllBooksUseCase = GetAllBooksUseCase()
-    private val borrowBookUseCase = BorrowBookUseCase()
-    private val toggleFavoriteBookUseCase = ToggleFavoriteBookUseCase()
-    private val addNewBookUseCase = AddNewBookUseCase()
-    private val searchBooksUseCase = SearchBooksUseCase()
+    private var currentJob: Job? = null
+
+
 
 
     init {
@@ -65,7 +75,7 @@ class BooksViewModel : ViewModel() {
         _loadingLiveData.value = true
         _loadingMoreLiveData.value = false
         _errorLiveData.value = null
-        viewModelScope.launch {
+        currentJob = viewModelScope.launch {
             val result = fetchBooksForPage()
             if(result.isNullOrEmpty()){
                 _errorLiveData.value = "Empty book list"
@@ -83,6 +93,7 @@ class BooksViewModel : ViewModel() {
         _errorLiveData.value = null
 
         if(query != lastQuery){
+            currentJob?.cancel()
             _booksLiveData.value = emptyList()
             viewModelScope.launch {
                 _isAllBookLoadedStateFlow.emit(false)
@@ -96,8 +107,10 @@ class BooksViewModel : ViewModel() {
             _loadingLiveData.value = false
             _loadingMoreLiveData.value = true
         }
+
         isLoading = true
-        viewModelScope.launch {
+        currentJob?.cancel()
+        currentJob = viewModelScope.launch {
             val result = fetchBooksForPage(query)
             if(result.isEmpty()){
                 _isAllBookLoadedStateFlow.emit(true)
@@ -107,6 +120,7 @@ class BooksViewModel : ViewModel() {
                 loadMoreBooks(lastQuery)
                 return@launch
             }
+
             _booksLiveData.value = _booksLiveData.value?.plus(result)
             _loadingMoreLiveData.value = false
             _loadingLiveData.value = false
@@ -151,6 +165,11 @@ class BooksViewModel : ViewModel() {
                 }
             }
         }
+    }
+
+    fun createNewBook(){
+        val newBook  = createNewBookUseCase()
+        addNewBook(newBook)
     }
 
     fun addNewBook(newBook: Book) {

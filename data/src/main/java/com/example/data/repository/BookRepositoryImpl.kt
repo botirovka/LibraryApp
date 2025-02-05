@@ -7,8 +7,9 @@ import com.example.domain.model.Book
 import com.example.domain.model.Genres
 import com.example.domain.model.State
 import com.example.domain.repository.BookRepository
+import javax.inject.Inject
 
-class BookRepositoryImpl : BookRepository {
+class BookRepositoryImpl @Inject constructor() : BookRepository {
     override suspend fun getBooksPaginated(startIndex: Int, pageSize: Int, query: String): List<Book> {
         return Library.getBooksPaginated(startIndex, pageSize, query)
     }

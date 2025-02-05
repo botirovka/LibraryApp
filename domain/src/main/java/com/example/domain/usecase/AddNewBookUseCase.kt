@@ -1,11 +1,14 @@
 package com.example.domain.usecase
 
-import com.example.domain.DIReplacer
 import com.example.domain.model.Book
+import com.example.domain.repository.BookRepository
+import javax.inject.Inject
 
 
-class AddNewBookUseCase() {
+class AddNewBookUseCase @Inject constructor(
+    private val bookRepository: BookRepository
+) {
     operator fun invoke(book: Book): Int {
-        return DIReplacer.bookRepository.addBook(book)
+        return bookRepository.addBook(book)
     }
 }
