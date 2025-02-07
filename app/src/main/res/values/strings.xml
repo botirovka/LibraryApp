@@ -2,4 +2,8 @@
     <string name="app_name">LibraryApp</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="enter_a_book_title_or_genre_to_search">Enter a book title or genre to search</string>
+    <string name="fetch_all_books">Fetch all books</string>
+    <string name="create_new_book">Create New Book</string>
+    <string name="borrow">Borrow</string>
 </resources>

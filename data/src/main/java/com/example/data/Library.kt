@@ -6,6 +6,7 @@ import com.example.data.model.toBook
 import com.example.domain.extensions.Extensions.Companion.groupByGenre
 import com.example.domain.extensions.Extensions.Companion.sortedByTitleAvailableFirstAscending
 import com.example.domain.model.Book
+import com.example.domain.model.State
 
 import kotlinx.coroutines.delay
 
@@ -274,30 +275,30 @@ object Library {
     }
 
     //Refactor all expensive functions
-    suspend fun getAllBooks(query: String = ""): com.example.domain.model.State {
+    suspend fun getAllBooks(query: String = ""): State {
         delay(mockDelay + 2000)
         if(query.isNotEmpty()){
             val booksByQuery = searchBooks(query)
             return if (booksByQuery.isNotEmpty()){
-                com.example.domain.model.State.Data(booksByQuery)
+                State.Data(booksByQuery)
             }
             else {
-                com.example.domain.model.State.Error("No books found")
+                State.Error("No books found")
             }
         }
         return if (books.isNotEmpty()) {
-            com.example.domain.model.State.Data(books.toList())
+            State.Data(books.toList())
         } else {
-            com.example.domain.model.State.Error("No books found")
+            State.Error("No books found")
         }
     }
 
-    suspend fun getAllBorrowedBooks(): com.example.domain.model.State {
+    suspend fun getAllBorrowedBooks(): State {
         delay(mockDelay)
         return if (books.isNotEmpty()) {
-            com.example.domain.model.State.Data(books.filter { it.borrowedCount > 0 }.toList())
+            State.Data(books.filter { it.borrowedCount > 0 }.toList())
         } else {
-            com.example.domain.model.State.Error("No books found")
+            State.Error("No books found")
         }
     }
 
@@ -403,6 +404,10 @@ object Library {
             return true
         }
         return false
+    }
+
+    fun getBookById(bookId: Int): Book? {
+        return books.find { it.id == bookId }
     }
 
 

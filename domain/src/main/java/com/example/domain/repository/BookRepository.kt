@@ -18,6 +18,7 @@ interface BookRepository {
     suspend fun getTrendingAuthor(): String?
     suspend fun getAvailableBooks(): List<Book>
     suspend fun getUniqueAuthors(): Set<String>
+    suspend fun getBookById(bookId: Int): Book?
     fun addBook(book: Book): Int
     suspend fun searchBooks(request: String): List<Book>
     fun borrowBook(title: String): Boolean

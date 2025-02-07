@@ -82,7 +82,7 @@
             android:layout_marginTop="8dp"
             android:backgroundTint="@color/black"
             android:textColor="@color/white"
-            android:text="Borrow"
+            android:text="@string/borrow"
             app:layout_constraintTop_toTopOf="@+id/availabilityTextView"
             app:layout_constraintEnd_toEndOf="parent"
              />

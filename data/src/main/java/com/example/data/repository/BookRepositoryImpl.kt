@@ -62,6 +62,10 @@ class BookRepositoryImpl @Inject constructor() : BookRepository {
         return Library.getUniqueAuthors()
     }
 
+    override suspend fun getBookById(bookId: Int): Book? {
+        return Library.getBookById(bookId)
+    }
+
     override fun addBook(book: Book): Int {
         return Library.addBook(book.toAddBookRequest())
     }

@@ -1,4 +1,4 @@
-package com.botirovka.libraryapp.mvvm
+package com.botirovka.libraryapp.bookList
 
 import android.content.res.ColorStateList
 import android.util.Log
@@ -15,8 +15,9 @@ import com.example.domain.model.Book
 
 import com.bumptech.glide.Glide
 
-class BookAdapter(private val onClickBorrow: (Book) -> Unit,
-                  private val onClickFavorite: (Book) -> Unit) :
+class BookAdapter(private val onBorrowClick: (Book) -> Unit,
+                  private val onItemClick: (Book) -> Unit,
+                  private val onFavoriteClick: (Book) -> Unit) :
     RecyclerView.Adapter<BookAdapter.BookViewHolder>() {
 
     private var books: List<Book> = emptyList()
@@ -71,12 +72,18 @@ class BookAdapter(private val onClickBorrow: (Book) -> Unit,
             }
 
             borrowButton.setOnClickListener {
-                onClickBorrow(book)
+                onBorrowClick(book)
+            }
+
+            itemView.setOnClickListener {
+                onItemClick(book)
             }
 
             favoriteImageView.setOnClickListener {
-                onClickFavorite(book)
+                onFavoriteClick(book)
             }
+
+
 
         }
 

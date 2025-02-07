@@ -6,11 +6,10 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
-import androidx.fragment.app.Fragment
+import androidx.navigation.findNavController
 import com.botirovka.libraryapp.databinding.ActivityMainBinding
+import com.botirovka.libraryapp.databinding.ContentMainBinding
 import com.example.domain.extensions.Extensions.Companion.printPretty
-import com.botirovka.libraryapp.mvvm.BooksMVVMFragment
-import com.google.android.material.bottomnavigation.BottomNavigationView
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -19,17 +18,16 @@ import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
-    private lateinit var binding: ActivityMainBinding
-    private lateinit var bottomNav: BottomNavigationView
+    private lateinit var binding: ContentMainBinding
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
-        binding = ActivityMainBinding.inflate(layoutInflater)
+        binding = ContentMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        setupUI(savedInstanceState)
         doOnBackground()
 
-        ViewCompat.setOnApplyWindowInsetsListener(binding.main) { v, insets ->
+        ViewCompat.setOnApplyWindowInsetsListener(binding.root) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
@@ -107,37 +105,6 @@ class MainActivity : AppCompatActivity() {
 
 
         }
-    }
-
-    private fun setupUI(savedInstanceState: Bundle?) {
-        if (savedInstanceState == null) {
-            replaceFragment(BooksMVVMFragment())
-        }
-        setupBottomNavigation()
-    }
-
-    private fun setupBottomNavigation() {
-        bottomNav = binding.bottomNav
-        bottomNav.setOnItemSelectedListener { item ->
-            when (item.itemId) {
-                R.id.add_book -> replaceFragment(BooksMVVMFragment())
-                R.id.books -> replaceFragment(BooksMVVMFragment())
-                R.id.borrowed_books -> replaceFragment(BooksMVVMFragment())
-                else -> false
-            }
-        }
-    }
-
-    private fun replaceFragment(fragment: Fragment , isBorrowed: Boolean = false): Boolean {
-        val bundle = Bundle()
-        bundle.putBoolean("is_borrowed", isBorrowed)
-        fragment.arguments = bundle
-
-        supportFragmentManager.popBackStack(null, androidx.fragment.app.FragmentManager.POP_BACK_STACK_INCLUSIVE)
-        supportFragmentManager.beginTransaction()
-            .replace(R.id.fragment_container, fragment)
-            .commit()
-        return true
     }
 
 }

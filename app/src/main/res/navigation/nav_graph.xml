@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/booksMVVMFragment">
+
+    <fragment
+        android:id="@+id/booksMVVMFragment"
+        android:name="com.botirovka.libraryapp.bookList.BooksMVVMFragment"
+        android:label="fragment_book_m_v_v_m"
+        tools:layout="@layout/fragment_book_m_v_v_m" >
+        <action
+            android:id="@+id/action_booksMVVMFragment_to_bookDetailsFragment"
+            app:destination="@id/bookDetailsFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/bookDetailsFragment"
+        android:name="com.botirovka.libraryapp.bookDetails.BookDetailsFragment"
+        android:label="fragment_book_details"
+        tools:layout="@layout/fragment_book_details" >
+        <argument
+            android:name="bookId"
+            app:argType="integer" />
+        <action
+            android:id="@+id/action_bookDetailsFragment_to_reviewsFragment"
+            app:destination="@id/reviewsFragment"
+            app:popUpTo="@id/booksMVVMFragment"
+            app:popUpToInclusive="false" />
+        <action
+            android:id="@+id/action_bookDetailsFragment_to_editBookFragment"
+            app:destination="@id/editBookFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/reviewsFragment"
+        android:name="com.botirovka.libraryapp.reviews.ReviewsFragment"
+        android:label="fragment_reviews"
+        tools:layout="@layout/fragment_reviews" >
+        <argument
+            android:name="bookId"
+            app:argType="integer" />
+    </fragment>
+    <fragment
+        android:id="@+id/editBookFragment"
+        android:name="com.botirovka.libraryapp.bookEdit.EditBookFragment"
+        android:label="fragment_edit_book"
+        tools:layout="@layout/fragment_edit_book" >
+        <argument
+            android:name="bookId"
+            app:argType="integer" />
+    </fragment>
+
+    <dialog
+        android:id="@+id/AreYouSureDialogFragment"
+        android:name="com.botirovka.libraryapp.dialog.AreYouSureFragment"
+        android:label="AreYouSureDialog" />
+
+    <action
+        android:id="@+id/action_global_areYouSureDialog"
+        app:destination="@id/AreYouSureDialogFragment" />
+
+
+
+</navigation>

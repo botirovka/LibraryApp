@@ -3,6 +3,8 @@ plugins {
     alias(libs.plugins.jetbrains.kotlin.android)
     id("kotlin-kapt")
     id("com.google.dagger.hilt.android")
+    kotlin("plugin.serialization") version "2.0.21"
+    id ("androidx.navigation.safeargs.kotlin")
 }
 
 android {
@@ -55,6 +57,8 @@ dependencies {
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
+    implementation(libs.androidx.navigation.fragment)
+    implementation(libs.androidx.navigation.ui)
 
     implementation(project(":domain"))
     implementation(project(":data"))

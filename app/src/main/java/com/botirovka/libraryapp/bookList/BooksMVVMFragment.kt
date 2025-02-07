@@ -1,4 +1,4 @@
-package com.botirovka.libraryapp.mvvm
+package com.botirovka.libraryapp.bookList
 
 import android.os.Bundle
 import android.text.Editable
@@ -15,6 +15,7 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.botirovka.libraryapp.databinding.FragmentBookMVVMBinding
@@ -61,7 +62,7 @@ class BooksMVVMFragment : Fragment() {
         loadMoreProgressBar = binding.loadMoreProgressBar
         errorTextView = binding.errorTextView
         searchEditText = binding.searchEditText
-        bookAdapter = BookAdapter(::onBorrowButtonClick, ::onFavoriteImageViewClick)
+        bookAdapter = BookAdapter(::onBorrowButtonClick, ::onItemViewClick,::onFavoriteImageViewClick )
         booksRecyclerView.adapter = bookAdapter
         createNewBookButton = binding.createNewBookButton
         fetchAllBookButton = binding.fetchAllBookButton
@@ -120,7 +121,13 @@ class BooksMVVMFragment : Fragment() {
     }
 
     private fun onFavoriteImageViewClick(book: Book) {
+        Log.d("mydebugg", "onFavoriteImageViewClick: ")
         booksViewModel.changeBookFavoriteStatus(book)
+    }
+
+    private fun onItemViewClick(book: Book) {
+        val action = BooksMVVMFragmentDirections.actionBooksMVVMFragmentToBookDetailsFragment(book.id)
+        findNavController().navigate(action)
     }
 
     private fun observeViewModel() {

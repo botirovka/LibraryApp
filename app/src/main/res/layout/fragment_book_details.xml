@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".bookDetails.BookDetailsFragment">
+
+    <ProgressBar
+        android:id="@+id/loadingProgressBar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:visibility="gone" />
+
+    <TextView
+        android:id="@+id/errorTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:visibility="gone"
+        android:text="Error loading book details" />
+
+    <LinearLayout
+        android:id="@+id/detailsContainer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="16dp"
+        android:visibility="gone"
+        tools:visibility="visible">
+
+        <TextView
+            android:id="@+id/bookTitleTextView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            tools:text="Book Title" />
+
+        <TextView
+            android:id="@+id/bookAuthorTextView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="18sp"
+            android:layout_marginTop="8dp"
+            tools:text="Author" />
+
+        <TextView
+            android:id="@+id/bookGenreTextView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="16sp"
+            android:layout_marginTop="8dp"
+            tools:text="Genre" />
+
+
+
+        <TextView
+            android:id="@+id/bookImageTextView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="16sp"
+            android:layout_marginTop="8dp"
+            tools:text="imageUrl" />
+
+        <TextView
+            android:id="@+id/bookBorrowedCountTextView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="16sp"
+            android:layout_marginTop="8dp"
+            tools:text="Borrow Count: 0" />
+
+        <TextView
+            android:id="@+id/bookTotalBookCountTextView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="16sp"
+            android:layout_marginTop="8dp"
+            tools:text="Total book count: 0" />
+
+        <TextView
+            android:id="@+id/bookIsAvailableTextView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="16sp"
+            android:layout_marginTop="8dp"
+            tools:text="Available:" />
+
+        <TextView
+            android:id="@+id/bookLastBorrowedTimeTextView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="16sp"
+            android:layout_marginTop="8dp"
+            tools:text="Last borrowed time" />
+
+        <TextView
+            android:id="@+id/bookIsFavoriteTextView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="16sp"
+            android:layout_marginTop="8dp"
+            tools:text="Favorite" />
+
+        <Button
+            android:id="@+id/reviewsButton"
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:backgroundTint="@color/ic_launcher_background"
+            android:textColor="@color/white"
+            android:text="Reviews"
+            />
+        <Button
+            android:id="@+id/editBookButton"
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="20dp"
+            android:backgroundTint="@color/orange_light"
+            android:textColor="@color/white"
+            android:text="Edit BOok"
+            />
+
+        <Button
+            android:id="@+id/closeAppButton"
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="20dp"
+            android:backgroundTint="@android:color/holo_red_dark"
+            android:textColor="@color/white"
+            android:text="Close App"
+            />
+
+    </LinearLayout>
+
+</FrameLayout>
