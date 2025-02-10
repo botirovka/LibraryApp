@@ -8,17 +8,17 @@ import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
+import com.botirovka.libraryapp.NavGraphDirections
 import com.botirovka.libraryapp.R
 import com.botirovka.libraryapp.databinding.FragmentBookDetailsBinding
+import com.bumptech.glide.Glide
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class BookDetailsFragment : Fragment() {
     private lateinit var binding: FragmentBookDetailsBinding
     private val args: BookDetailsFragmentArgs by navArgs()
-    private val viewModel: BookDetailsViewModel by viewModels(
-
-    )
+    private val viewModel: BookDetailsViewModel by viewModels()
 
 
     override fun onCreateView(
@@ -34,6 +34,10 @@ class BookDetailsFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         observeViewModel()
 
+        if(savedInstanceState == null){
+            viewModel.loadBookDetails(args.bookId)
+        }
+
         binding.reviewsButton.setOnClickListener {
             findNavController().navigate(BookDetailsFragmentDirections.actionBookDetailsFragmentToReviewsFragment(args.bookId))
         }
@@ -42,16 +46,15 @@ class BookDetailsFragment : Fragment() {
             findNavController().navigate(BookDetailsFragmentDirections.actionBookDetailsFragmentToEditBookFragment(args.bookId))
         }
 
-        binding.closeAppButton.setOnClickListener {
-           findNavController().navigate(R.id.action_global_areYouSureDialog)
-        }
     }
 
 
     private fun observeViewModel() {
         viewModel.loading.observe(viewLifecycleOwner) { isLoading ->
-            binding.loadingProgressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
-            binding.detailsContainer.visibility = if (isLoading) View.GONE else View.VISIBLE
+            binding.loadingImageProgressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
+            binding.loadingDetailsProgressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
+            binding.headerContainer.visibility = if (isLoading) View.GONE else View.VISIBLE
+            binding.detailsTextGroup.visibility = if (isLoading) View.GONE else View.VISIBLE
             binding.errorTextView.visibility = View.GONE
         }
 
@@ -59,7 +62,8 @@ class BookDetailsFragment : Fragment() {
             if (errorMessage != null) {
                 binding.errorTextView.text = errorMessage
                 binding.errorTextView.visibility = View.VISIBLE
-                binding.detailsContainer.visibility = View.GONE
+                binding.detailsTextGroup.visibility = View.GONE
+                binding.headerContainer.visibility = View.GONE
             } else {
                 binding.errorTextView.visibility = View.GONE
             }
@@ -67,16 +71,22 @@ class BookDetailsFragment : Fragment() {
 
         viewModel.bookDetails.observe(viewLifecycleOwner) { book ->
             if (book != null) {
+                binding.bookDetailsToolbar.title = book.title
                 binding.bookTitleTextView.text = book.title
-                binding.bookAuthorTextView.text = book.author
-                binding.bookGenreTextView.text = book.genre.toString()
-                binding.bookImageTextView.text = book.image
-                binding.bookBorrowedCountTextView.text = book.borrowedCount.toString()
-                binding.bookTotalBookCountTextView.text = book.totalBookCount.toString()
-                binding.bookIsAvailableTextView.text = if(book.isAvailable)  "Available" else "Not Available"
-                binding.bookLastBorrowedTimeTextView.text = book.lastBorrowedTime.toString()
-                binding.bookIsFavoriteTextView.text = if (book.isFavorite) "This book is a favorite" else "This book is not a favorite"
-                binding.detailsContainer.visibility = View.VISIBLE
+                binding.authorTextView.text = book.author
+                binding.genreTextView.text = book.genre.toString()
+                if (book.image.isNotEmpty()) {
+                    binding.bookImageView.visibility = View.VISIBLE
+                    Glide.with(requireContext())
+                        .load(book.image)
+                        .placeholder(R.drawable.book_icon)
+                        .into(binding.bookImageView)
+                } else {
+                    binding.bookImageView.visibility = View.VISIBLE
+                }
+                binding.availableTextView.text = "${book.totalBookCount - book.borrowedCount}/${book.totalBookCount}"
+                binding.detailsTextGroup.visibility = View.VISIBLE
+                binding.headerContainer.visibility = View.VISIBLE
                 binding.errorTextView.visibility = View.GONE
             }
         }

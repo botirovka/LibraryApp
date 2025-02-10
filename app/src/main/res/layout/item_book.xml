@@ -41,7 +41,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="@+id/titleTextView"
             app:tint="@color/black"
-            tools:tint="@android:color/holo_orange_light" />
+            tools:tint="@color/orange_light" />
 
 
         <TextView

@@ -1,20 +1,22 @@
-package com.botirovka.libraryapp.bookDetails
+package com.botirovka.libraryapp.bookEdit
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.domain.model.Book
+import com.example.domain.model.ChangeBookRequest
+import com.example.domain.usecase.ChangeBookUseCase
 import com.example.domain.usecase.GetBookByIdUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-
 @HiltViewModel
-class BookDetailsViewModel @Inject constructor(
+class EditBookViewModel @Inject constructor(
     private val getBookByIdUseCase: GetBookByIdUseCase,
+    private val changeBookUseCase: ChangeBookUseCase
 ): ViewModel() {
 
     private val _bookDetails = MutableLiveData<Book>()
@@ -25,6 +27,10 @@ class BookDetailsViewModel @Inject constructor(
 
     private val _error = MutableLiveData<String?>()
     val error: LiveData<String?> = _error
+
+
+    private val _changed = MutableLiveData<Boolean>()
+    val changed: LiveData<Boolean> = _changed
 
 
 
@@ -42,4 +48,12 @@ class BookDetailsViewModel @Inject constructor(
 
         }
     }
+
+    fun changeBook(changeBookRequest: ChangeBookRequest) {
+        Log.d("mydebugChange", "changeBookVM: $changeBookRequest")
+        if(changeBookUseCase.invoke(changeBookRequest)){
+            _changed.value = true
+        }
+    }
+
 }

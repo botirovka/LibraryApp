@@ -4,6 +4,7 @@ package com.example.data.repository
 import com.example.data.Library
 import com.example.data.model.toAddBookRequest
 import com.example.domain.model.Book
+import com.example.domain.model.ChangeBookRequest
 import com.example.domain.model.Genres
 import com.example.domain.model.State
 import com.example.domain.repository.BookRepository
@@ -64,6 +65,10 @@ class BookRepositoryImpl @Inject constructor() : BookRepository {
 
     override suspend fun getBookById(bookId: Int): Book? {
         return Library.getBookById(bookId)
+    }
+
+    override fun changeBook(changeBookRequest: ChangeBookRequest): Boolean {
+        return Library.changeBook(changeBookRequest)
     }
 
     override fun addBook(book: Book): Int {

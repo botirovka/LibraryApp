@@ -1,6 +1,7 @@
 package com.example.domain.repository
 
 import com.example.domain.model.Book
+import com.example.domain.model.ChangeBookRequest
 import com.example.domain.model.Genres
 import com.example.domain.model.State
 
@@ -19,6 +20,7 @@ interface BookRepository {
     suspend fun getAvailableBooks(): List<Book>
     suspend fun getUniqueAuthors(): Set<String>
     suspend fun getBookById(bookId: Int): Book?
+    fun changeBook(changeBookRequest: ChangeBookRequest): Boolean
     fun addBook(book: Book): Int
     suspend fun searchBooks(request: String): List<Book>
     fun borrowBook(title: String): Boolean

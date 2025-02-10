@@ -2,5 +2,8 @@
 <resources>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
-    <color name="orange_light">#FFBB33</color>
+    <color name="orange_light">#FFD200</color>
+    <color name="black_overlay">#80000000</color>
+    <color name="purple_light">#B0B4E1</color>
+    <color name="light_gray">#DFDFE9</color>
 </resources>

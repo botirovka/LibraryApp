@@ -6,4 +6,6 @@
     <string name="fetch_all_books">Fetch all books</string>
     <string name="create_new_book">Create New Book</string>
     <string name="borrow">Borrow</string>
+    <string name="very_long_test_string">Verryyyyyyyyyyyyyyyyy loooooonnngggggggggg teeessstttttt ssssssssssstttttttttttrrrrrrrrrriiiiiiiinnnnnnnnggggg</string>
+    <string name="share_your_thoughts_about_this_book">Share your thoughts about this book</string>
 </resources>

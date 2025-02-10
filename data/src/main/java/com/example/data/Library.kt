@@ -6,9 +6,12 @@ import com.example.data.model.toBook
 import com.example.domain.extensions.Extensions.Companion.groupByGenre
 import com.example.domain.extensions.Extensions.Companion.sortedByTitleAvailableFirstAscending
 import com.example.domain.model.Book
+import com.example.domain.model.ChangeBookRequest
+import com.example.domain.model.Genres
 import com.example.domain.model.State
 
 import kotlinx.coroutines.delay
+import kotlin.enums.enumEntries
 
 object Library {
     private val books: MutableList<Book>
@@ -406,8 +409,24 @@ object Library {
         return false
     }
 
-    fun getBookById(bookId: Int): Book? {
+    suspend fun getBookById(bookId: Int): Book? {
+        delay(mockDelay)
         return books.find { it.id == bookId }
+    }
+
+    fun changeBook(changeBookRequest: ChangeBookRequest) : Boolean {
+        Log.d("mydebugChange", "changeBook: $changeBookRequest")
+        books.find { it.id == changeBookRequest.id }?.apply {
+            changeBookRequest.title?.takeIf { it.isNotBlank() }?.let { title = it }
+            changeBookRequest.author?.takeIf { it.isNotBlank() }?.let { author = it }
+            changeBookRequest.genre?.takeIf { it.isNotBlank() }?.let {
+                val genreParsed: Genres = enumValueOf(it)
+                genre = genreParsed
+
+            }
+
+        }
+        return true
     }
 
 

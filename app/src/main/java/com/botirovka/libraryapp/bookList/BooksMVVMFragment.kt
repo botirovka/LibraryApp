@@ -8,10 +8,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
-import android.widget.EditText
 import android.widget.ProgressBar
 import android.widget.TextView
 import android.widget.Toast
+import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
@@ -20,6 +20,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.botirovka.libraryapp.databinding.FragmentBookMVVMBinding
 import com.example.domain.model.Book
+import com.google.android.material.textfield.TextInputLayout
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -33,7 +34,7 @@ class BooksMVVMFragment : Fragment() {
     private lateinit var loadingProgressBar: ProgressBar
     private lateinit var loadMoreProgressBar: ProgressBar
     private lateinit var errorTextView: TextView
-    private lateinit var searchEditText: EditText
+    private lateinit var searchInputLayout: TextInputLayout
     private lateinit var createNewBookButton: Button
     private lateinit var fetchAllBookButton: Button
     private var isInitialTextChange = true
@@ -61,7 +62,7 @@ class BooksMVVMFragment : Fragment() {
         loadingProgressBar = binding.loadingProgressBar
         loadMoreProgressBar = binding.loadMoreProgressBar
         errorTextView = binding.errorTextView
-        searchEditText = binding.searchEditText
+        searchInputLayout = binding.searchEditText
         bookAdapter = BookAdapter(::onBorrowButtonClick, ::onItemViewClick,::onFavoriteImageViewClick )
         booksRecyclerView.adapter = bookAdapter
         createNewBookButton = binding.createNewBookButton
@@ -172,6 +173,7 @@ class BooksMVVMFragment : Fragment() {
             Log.d("mydebugMVVM", " $isAllBookLoaded before stateFlow")
             booksViewModel.isAllBookLoadedStateFlow.collectLatest {
                 isAllBookLoaded = it
+
                 Log.d("mydebugMVVM", " $isAllBookLoaded after stateFlow")
             }
 
@@ -179,7 +181,7 @@ class BooksMVVMFragment : Fragment() {
     }
 
     private fun setupSearch() {
-        searchEditText.addTextChangedListener(object : TextWatcher {
+        searchInputLayout.editText?.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {

@@ -29,7 +29,7 @@ class ReviewsFragment : Fragment() {
     private fun observeViewModel() {
         viewModel.loading.observe(viewLifecycleOwner) { isLoading ->
             binding.loadingProgressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
-            binding.reviewTextView.visibility = if (isLoading) View.GONE else View.VISIBLE
+            binding.reviewsContainerCL.visibility = if (isLoading) View.GONE else View.VISIBLE
             binding.errorTextView.visibility = View.GONE
         }
 
@@ -37,7 +37,7 @@ class ReviewsFragment : Fragment() {
             if (errorMessage != null) {
                 binding.errorTextView.text = errorMessage
                 binding.errorTextView.visibility = View.VISIBLE
-                binding.reviewTextView.visibility = View.GONE
+                binding.reviewsContainerCL.visibility = View.GONE
             } else {
                 binding.errorTextView.visibility = View.GONE
             }
@@ -48,7 +48,7 @@ class ReviewsFragment : Fragment() {
                 binding.titleTextView.text = "Petro"
                 binding.reviewTextView.text = "${book.title} is a good book."
                 binding.ratingTextView.text = "${book.totalBookCount - book.borrowedCount}/${book.totalBookCount}"
-                binding.reviewTextView.visibility = View.VISIBLE
+                binding.reviewsContainerCL.visibility = View.VISIBLE
                 binding.errorTextView.visibility = View.GONE
             }
         }
