@@ -30,6 +30,10 @@
         <action
             android:id="@+id/action_bookDetailsFragment_to_editBookFragment"
             app:destination="@id/editBookFragment" />
+        <action
+            android:id="@+id/action_bookDetailsFragment_self"
+            app:destination="@id/bookDetailsFragment"
+            app:popUpTo="@id/booksMVVMFragment" />
     </fragment>
     <fragment
         android:id="@+id/reviewsFragment"
