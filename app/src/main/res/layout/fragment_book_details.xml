@@ -12,11 +12,11 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center|top"
-        android:background="@drawable/circle_shape"
-        android:backgroundTint="@color/white"
         android:elevation="1dp"
         app:layout_anchor="@+id/appBarLayout"
-        app:layout_anchorGravity="center" />
+        app:layout_anchorGravity="center"
+        style="@style/CustomProgressBar.Secondary"
+        tools:visibility="visible"/>
 
 
 
@@ -29,7 +29,7 @@
 
         android:elevation="1dp"
         android:textColor="@color/black"
-        android:text="Error loading book details" />
+        android:text="@string/error_loading_book_details" />
 
 
     <com.google.android.material.appbar.AppBarLayout
@@ -62,7 +62,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:scaleType="centerCrop"
-                    android:src="@drawable/book_details_background" />
+                    android:src="@drawable/bg_book_details_default" />
 
                 <View
                     android:layout_width="match_parent"
@@ -120,7 +120,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:fillViewport="true"
-        android:background="@drawable/rounded_bg"
+        android:background="@drawable/bg_rounded_shape"
         app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior">
 
        <androidx.constraintlayout.widget.ConstraintLayout
@@ -154,12 +154,10 @@
                android:backgroundTint="@color/orange_light"
                android:text="Edit Book"
                android:textColor="@color/black"
-               android:textSize="18sp"
                app:layout_constraintEnd_toStartOf="@id/bookDescriptionCentralVerticalGuideLine"
                app:layout_constraintStart_toStartOf="parent"
-
-
-               app:layout_constraintTop_toTopOf="parent" />
+               app:layout_constraintTop_toTopOf="parent"
+               style="@style/TextAppearance.AppCompat.Button"/>
 
            <com.google.android.material.button.MaterialButton
                android:id="@+id/reviewsButton"
@@ -169,13 +167,12 @@
                android:layout_marginHorizontal="25dp"
                android:layout_marginTop="20dp"
                android:backgroundTint="@color/orange_light"
-
-               android:text="Reviews"
+               android:text="@string/reviews"
                android:textColor="@color/black"
-               android:textSize="18sp"
                app:layout_constraintEnd_toEndOf="parent"
                app:layout_constraintStart_toStartOf="@id/bookDescriptionCentralVerticalGuideLine"
-               app:layout_constraintTop_toTopOf="parent" />
+               app:layout_constraintTop_toTopOf="parent"
+               style="@style/TextAppearance.AppCompat.Button"/>
 
 
            <TextView
@@ -183,26 +180,22 @@
                android:layout_width="wrap_content"
                android:layout_height="wrap_content"
                android:textColor="@color/black"
-               android:textSize="25sp"
                android:text="Details"
                android:layout_marginTop="20dp"
                app:layout_constraintStart_toStartOf="parent"
                app:layout_constraintEnd_toEndOf="parent"
-               app:layout_constraintTop_toBottomOf="@id/reviewsButton"/>
+               app:layout_constraintTop_toBottomOf="@id/reviewsButton"
+               style="@style/TextAppearance.H1"/>
 
            <ProgressBar
                android:id="@+id/loadingDetailsProgressBar"
                android:layout_width="wrap_content"
                android:layout_height="wrap_content"
-               android:layout_gravity="center"
-               android:background="@drawable/circle_shape"
-               android:backgroundTint="@color/black"
-               android:elevation="1dp"
-               android:visibility="gone"
                android:layout_marginTop="20dp"
                app:layout_constraintStart_toStartOf="parent"
                app:layout_constraintEnd_toEndOf="parent"
-               app:layout_constraintTop_toBottomOf="@id/detailsTextView"/>
+               app:layout_constraintTop_toBottomOf="@id/detailsTextView"
+               style="@style/CustomProgressBar.Secondary"/>
 
 
 
@@ -211,7 +204,8 @@
                android:layout_width="match_parent"
                android:layout_height="match_parent"
                app:constraint_referenced_ids="hintAuthorTextView,
-               hintAvailableTextView,hintGenreTextView,authorTextView,genreTextView,availableTextView"/>
+               hintAvailableTextView,hintGenreTextView,authorTextView,
+               genreTextView,availableTextView,hintDescriptionTextView"/>
 
 
 
@@ -219,103 +213,95 @@
                android:id="@+id/hintAuthorTextView"
                android:layout_width="wrap_content"
                android:layout_height="wrap_content"
-               android:textColor="@color/black_overlay"
-               android:textSize="20sp"
                android:text="Author:"
                android:layout_marginStart="20dp"
                android:layout_marginTop="10dp"
                app:layout_constraintStart_toStartOf="parent"
-               app:layout_constraintTop_toBottomOf="@id/detailsTextView"/>
+               app:layout_constraintTop_toBottomOf="@id/detailsTextView"
+               style="@style/TextAppearance.H4"/>
 
            <TextView
                android:id="@+id/authorTextView"
                android:layout_width="0dp"
                android:layout_height="wrap_content"
-               android:textColor="@color/black"
-               android:textSize="25sp"
                tools:text="@string/very_long_test_string"
                android:layout_marginStart="20dp"
                android:layout_marginTop="5dp"
                app:layout_constraintStart_toStartOf="parent"
                app:layout_constraintEnd_toStartOf="@id/bookDescriptionTextEndVerticalGuideLine"
-               app:layout_constraintTop_toBottomOf="@id/hintAuthorTextView"/>
+               app:layout_constraintTop_toBottomOf="@id/hintAuthorTextView"
+               style="@style/TextAppearance.H3"/>
 
 
            <TextView
                android:id="@+id/hintGenreTextView"
                android:layout_width="wrap_content"
                android:layout_height="wrap_content"
-               android:textColor="@color/black_overlay"
-               android:textSize="20sp"
                android:text="Genre:"
                android:layout_marginStart="20dp"
                android:layout_marginTop="10dp"
                app:layout_constraintStart_toStartOf="parent"
-               app:layout_constraintTop_toBottomOf="@id/authorTextView"/>
+               app:layout_constraintTop_toBottomOf="@id/authorTextView"
+               style="@style/TextAppearance.H4"/>
 
            <TextView
                android:id="@+id/genreTextView"
                android:layout_width="0dp"
                android:layout_height="wrap_content"
-               android:textColor="@color/black"
-               android:textSize="25sp"
                tools:text="Fantasy"
                android:layout_marginStart="20dp"
                android:layout_marginTop="5dp"
                app:layout_constraintStart_toStartOf="parent"
                app:layout_constraintEnd_toStartOf="@id/bookDescriptionTextEndVerticalGuideLine"
-               app:layout_constraintTop_toBottomOf="@id/hintGenreTextView"/>
+               app:layout_constraintTop_toBottomOf="@id/hintGenreTextView"
+               style="@style/TextAppearance.H3"/>
 
 
            <TextView
                android:id="@+id/hintAvailableTextView"
                android:layout_width="wrap_content"
                android:layout_height="wrap_content"
-               android:textColor="@color/black_overlay"
-               android:textSize="20sp"
                android:text="Available:"
                android:layout_marginStart="20dp"
                android:layout_marginTop="10dp"
                app:layout_constraintStart_toStartOf="parent"
-               app:layout_constraintTop_toBottomOf="@id/genreTextView"/>
+               app:layout_constraintTop_toBottomOf="@id/genreTextView"
+               style="@style/TextAppearance.H4"/>
 
            <TextView
                android:id="@+id/availableTextView"
                android:layout_width="0dp"
                android:layout_height="wrap_content"
-               android:textColor="@color/black"
-               android:textSize="25sp"
                tools:text="5/10"
                android:layout_marginStart="20dp"
                android:layout_marginTop="5dp"
                app:layout_constraintStart_toStartOf="parent"
                app:layout_constraintEnd_toStartOf="@id/bookDescriptionTextEndVerticalGuideLine"
-               app:layout_constraintTop_toBottomOf="@id/hintAvailableTextView"/>
+               app:layout_constraintTop_toBottomOf="@id/hintAvailableTextView"
+               style="@style/TextAppearance.H3"/>
 
            <TextView
                android:id="@+id/hintDescriptionTextView"
                android:layout_width="wrap_content"
                android:layout_height="wrap_content"
-               android:textColor="@color/black_overlay"
-               android:textSize="20sp"
-               android:text="Description:"
+               android:text="@string/description"
                android:layout_marginStart="20dp"
                android:layout_marginTop="10dp"
                app:layout_constraintStart_toStartOf="parent"
-               app:layout_constraintTop_toBottomOf="@id/availableTextView"/>
+               app:layout_constraintTop_toBottomOf="@id/availableTextView"
+               style="@style/TextAppearance.H4"/>
 
            <TextView
                android:id="@+id/DescriptionTextView"
                android:layout_width="0dp"
                android:layout_height="wrap_content"
-               android:textColor="@color/black"
-               android:textSize="25sp"
-               android:text="@string/very_long_test_string"
+               tools:text="@string/very_long_test_string"
                android:layout_marginStart="20dp"
                android:layout_marginTop="5dp"
                app:layout_constraintStart_toStartOf="parent"
                app:layout_constraintEnd_toStartOf="@id/bookDescriptionTextEndVerticalGuideLine"
-               app:layout_constraintTop_toBottomOf="@id/hintDescriptionTextView"/>
+               app:layout_constraintTop_toBottomOf="@id/hintDescriptionTextView"
+               style="@style/TextAppearance.H3"/>
 
 
 

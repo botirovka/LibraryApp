@@ -8,4 +8,14 @@
     <string name="borrow">Borrow</string>
     <string name="very_long_test_string">Verryyyyyyyyyyyyyyyyy loooooonnngggggggggg teeessstttttt ssssssssssstttttttttttrrrrrrrrrriiiiiiiinnnnnnnnggggg</string>
     <string name="share_your_thoughts_about_this_book">Share your thoughts about this book</string>
+    <string name="error_loading_book_details">Error loading book details</string>
+    <string name="reviews">Reviews</string>
+    <string name="enter_a_new_book_parameter_or_leave_it_blank">Enter a new book parameter or leave it blank to keep the old one.</string>
+    <string name="enter_a_new_book_title">Enter a new book title</string>
+    <string name="cancel">Cancel</string>
+    <string name="save">Save</string>
+    <string name="select_a_new_book_genre">Select a new book genre</string>
+    <string name="enter_a_new_book_author">Enter a new book author</string>
+    <string name="edit_book">Edit Book</string>
+    <string name="description">Description:</string>
 </resources>

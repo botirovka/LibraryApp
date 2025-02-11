@@ -41,7 +41,8 @@
                 android:background="@color/orange_light"
                 android:padding="20dp"
                 app:layout_constraintTop_toTopOf="parent"
-                android:text="Reviews"/>
+                android:text="Reviews"
+                style="@style/TextAppearance.H1"/>
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/authorEditTextLayout"
@@ -50,8 +51,10 @@
 
                 android:hint="@string/share_your_thoughts_about_this_book"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toStartOf="@id/sendReviewImageView"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/reviewsTitleTextView"
+                app:endIconMode="custom"
+                app:endIconDrawable="@drawable/ic_arrow_forward"
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
 
                 <com.google.android.material.textfield.TextInputEditText
@@ -60,15 +63,7 @@
 
             </com.google.android.material.textfield.TextInputLayout>
 
-            <ImageView
-                android:id="@+id/sendReviewImageView"
-                android:layout_width="30dp"
-                android:layout_height="50dp"
-                app:layout_constraintTop_toBottomOf="@id/reviewsTitleTextView"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintBottom_toBottomOf="@id/authorEditTextLayout"
-                android:src="@drawable/arrow_forward_icon"
-                app:tint="@color/orange_light" />
+
 
             <ImageView
                 android:id="@+id/profileImageView"
@@ -78,7 +73,7 @@
                 android:layout_marginTop="10dp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/authorEditTextLayout"
-                android:src="@drawable/account_icon"
+                android:src="@drawable/ic_account"
                 app:tint="@color/orange_light" />
 
             <TextView

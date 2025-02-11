@@ -8,7 +8,6 @@ import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
-import com.botirovka.libraryapp.NavGraphDirections
 import com.botirovka.libraryapp.R
 import com.botirovka.libraryapp.databinding.FragmentBookDetailsBinding
 import com.bumptech.glide.Glide
@@ -75,11 +74,12 @@ class BookDetailsFragment : Fragment() {
                 binding.bookTitleTextView.text = book.title
                 binding.authorTextView.text = book.author
                 binding.genreTextView.text = book.genre.toString()
+                binding.DescriptionTextView.text = getString(R.string.very_long_test_string)
                 if (book.image.isNotEmpty()) {
                     binding.bookImageView.visibility = View.VISIBLE
                     Glide.with(requireContext())
                         .load(book.image)
-                        .placeholder(R.drawable.book_icon)
+                        .placeholder(R.drawable.ic_book)
                         .into(binding.bookImageView)
                 } else {
                     binding.bookImageView.visibility = View.VISIBLE

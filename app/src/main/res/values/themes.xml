@@ -1,8 +1,12 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
     <style name="Base.Theme.LibraryApp" parent="Theme.Material3.DayNight.NoActionBar">
-        <item name="android:fontFamily">@font/circular_std_medium_500</item>>
+        <item name="android:fontFamily">@font/circular_std_regular</item>>
+
     </style>
+
+    <color name="primary_color">#101828</color>
+    <color name="secondary_color">#FFFFFF</color>
 
     <style name="Theme.LibraryApp" parent="Base.Theme.LibraryApp" />
 </resources>

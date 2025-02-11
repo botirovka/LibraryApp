@@ -7,7 +7,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.AutoCompleteTextView
-import android.widget.Toast
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
@@ -39,7 +38,7 @@ class EditBookFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         genresDropMenu = binding.autoCompleteTV
-        adapterItems = ArrayAdapter<String>(requireContext(), R.layout.genres_list_item,genresItems)
+        adapterItems = ArrayAdapter<String>(requireContext(), R.layout.item_genres_list,genresItems)
         genresDropMenu.setAdapter(adapterItems)
 
         if(savedInstanceState == null){
@@ -60,7 +59,8 @@ class EditBookFragment : Fragment() {
         binding.confirmEditBookButton.setOnClickListener {
             val title = binding.titleEditTextLayout.editText?.text.toString()
             val author = binding.authorEditTextLayout.editText?.text.toString()
-            viewModel.changeBook(ChangeBookRequest(args.bookId, title, author, selectedGenre))
+            val isFavorite = binding.switchIsFavorite.isChecked
+            viewModel.changeBook(ChangeBookRequest(args.bookId, title, author, selectedGenre, isFavorite))
         }
 
 
@@ -90,7 +90,10 @@ class EditBookFragment : Fragment() {
             if (book != null) {
                 binding.bookTitleTextView.text = book.title
                 binding.editBookLinearLayout.visibility = View.VISIBLE
-
+                binding.switchIsFavorite.isChecked = book.isFavorite
+                binding.titleEditTextLayout.editText?.setText(book.title)
+                binding.authorEditTextLayout.editText?.setText(book.author)
+                binding.autoCompleteTV.setText(book.genre.toString(),false)
             }
         }
 

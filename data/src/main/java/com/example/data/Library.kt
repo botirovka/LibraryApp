@@ -424,6 +424,7 @@ object Library {
                 genre = genreParsed
 
             }
+            isFavorite = changeBookRequest.isFavorite
 
         }
         return true

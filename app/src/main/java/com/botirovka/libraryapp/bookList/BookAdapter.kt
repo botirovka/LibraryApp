@@ -60,7 +60,7 @@ class BookAdapter(private val onBorrowClick: (Book) -> Unit,
                 bookImageView.visibility = View.VISIBLE
                 Glide.with(itemView.context)
                     .load(book.image)
-                    .placeholder(R.drawable.book_icon)
+                    .placeholder(R.drawable.ic_book)
                     .into(bookImageView)
             } else {
                 bookImageView.visibility = View.GONE
