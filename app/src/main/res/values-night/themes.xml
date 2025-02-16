@@ -5,7 +5,7 @@
 
     </style>
 
-    <color name="primary_color">#FFFFFF</color>
-    <color name="secondary_color">#101828</color>
+    <color name="primary_color">@color/white</color>
+    <color name="secondary_color">@color/black</color>
 
 </resources>

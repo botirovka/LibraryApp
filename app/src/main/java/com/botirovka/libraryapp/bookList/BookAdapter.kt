@@ -1,7 +1,6 @@
 package com.botirovka.libraryapp.bookList
 
 import android.content.res.ColorStateList
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -15,9 +14,11 @@ import com.example.domain.model.Book
 
 import com.bumptech.glide.Glide
 
-class BookAdapter(private val onBorrowClick: (Book) -> Unit,
-                  private val onItemClick: (Book) -> Unit,
-                  private val onFavoriteClick: (Book) -> Unit) :
+class BookAdapter(
+    private val onBorrowClick: (Book) -> Unit,
+    private val onItemClick: (Book) -> Unit,
+    private val onFavoriteClick: (Book) -> Unit
+) :
     RecyclerView.Adapter<BookAdapter.BookViewHolder>() {
 
     private var books: List<Book> = emptyList()
@@ -42,7 +43,7 @@ class BookAdapter(private val onBorrowClick: (Book) -> Unit,
 
     inner class BookViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         private val bookImageView: ImageView = itemView.findViewById(R.id.bookImageView)
-        private val titleTextView: TextView = itemView.findViewById(R.id.titleTextView)
+        private val titleTextView: TextView = itemView.findViewById(R.id.usernameTextView)
         private val authorTextView: TextView = itemView.findViewById(R.id.authorTextView)
         private val genreTextView: TextView = itemView.findViewById(R.id.genreTextView)
         private val availabilityTextView: TextView = itemView.findViewById(R.id.availabilityTextView)
@@ -55,7 +56,7 @@ class BookAdapter(private val onBorrowClick: (Book) -> Unit,
             genreTextView.text = book.genre.name
             availabilityTextView.text =
                 "Available: ${book.totalBookCount - book.borrowedCount}/${book.totalBookCount}"
-            Log.d("mydebuga", "${book.totalBookCount}  ${book.borrowedCount}")
+
             if (book.image.isNotEmpty()) {
                 bookImageView.visibility = View.VISIBLE
                 Glide.with(itemView.context)
@@ -63,12 +64,21 @@ class BookAdapter(private val onBorrowClick: (Book) -> Unit,
                     .placeholder(R.drawable.ic_book)
                     .into(bookImageView)
             } else {
-                bookImageView.visibility = View.GONE
+                bookImageView.visibility = View.VISIBLE
+                Glide.with(itemView.context)
+                    .load(R.drawable.ic_book)
+                    .into(bookImageView)
             }
             if (book.isFavorite) {
-                favoriteImageView.imageTintList = ColorStateList.valueOf(ContextCompat.getColor(itemView.context, R.color.orange_light))
+                favoriteImageView.imageTintList = ColorStateList.valueOf(
+                    ContextCompat.getColor(
+                        itemView.context,
+                        R.color.orange_light
+                    )
+                )
             } else {
-                favoriteImageView.imageTintList = ColorStateList.valueOf(ContextCompat.getColor(itemView.context, R.color.black))
+                favoriteImageView.imageTintList =
+                    ColorStateList.valueOf(ContextCompat.getColor(itemView.context, R.color.black))
             }
 
             borrowButton.setOnClickListener {
@@ -82,11 +92,6 @@ class BookAdapter(private val onBorrowClick: (Book) -> Unit,
             favoriteImageView.setOnClickListener {
                 onFavoriteClick(book)
             }
-
-
-
         }
-
-
     }
 }

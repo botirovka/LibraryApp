@@ -8,14 +8,19 @@ import com.example.domain.extensions.Extensions.Companion.sortedByTitleAvailable
 import com.example.domain.model.Book
 import com.example.domain.model.ChangeBookRequest
 import com.example.domain.model.Genres
+import com.example.domain.model.Review
 import com.example.domain.model.State
 
 import kotlinx.coroutines.delay
-import kotlin.enums.enumEntries
 
 object Library {
     private val books: MutableList<Book>
+    private val reviews: MutableList<Review>
     private const val mockDelay: Long = 1000L
+    private val testString = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. " +
+            "Curabitur consequat mattis tortor ac semper. " +
+            "Donec at metus vel sapien placerat consectetur a sit amet leo." +
+            " Pellentesque a diam et velit facilisis iaculis eu eu velit."
 
 
     init {
@@ -109,135 +114,36 @@ object Library {
                 "Test Book",
                 "Without Image",
                 Genres.THRILLER
-            ),
-            Book(
-                0,
-                "Test Book",
-                "Without Image",
-                Genres.THRILLER
-            ),
-            Book(
-                0,
-                "Test Book",
-                "Without Image",
-                Genres.THRILLER
-            ),
-            Book(
-                0,
-                "Test Book",
-                "Without Image",
-                Genres.THRILLER
-            ),
-            Book(
-                0,
-                "Test Book",
-                "Without Image",
-                Genres.THRILLER
-            ),
-            Book(
-                0,
-                "Test Book",
-                "Without Image",
-                Genres.THRILLER
-            ),
-            Book(
-                0,
-                "Test Book",
-                "Without Image",
-                Genres.THRILLER
-            ),
-            Book(
-                0,
-                "Test Book",
-                "Without Image",
-                Genres.THRILLER
-            ),
-            Book(
-                0,
-                "Test Book",
-                "Without Image",
-                Genres.THRILLER
-            ),
-            Book(
-                0,
-                "Test Book",
-                "Without Image",
-                Genres.THRILLER
-            ),
-            Book(
-                0,
-                "Test Book",
-                "Without Image",
-                Genres.THRILLER
-            ),
-            Book(
-                0,
-                "Test Book",
-                "Without Image",
-                Genres.THRILLER
-            ),
-            Book(
-                0,
-                "Test Book",
-                "Without Image",
-                Genres.THRILLER
-            ),
-            Book(
-                0,
-                "Test Book",
-                "Without Image",
-                Genres.THRILLER
-            ),
-            Book(
-                0,
-                "Test Book",
-                "Without Image",
-                Genres.THRILLER
-            ),
-            Book(
-                0,
-                "Test Book",
-                "Without Image",
-                Genres.THRILLER
-            ),
-            Book(
-                0,
-                "Test Book",
-                "Without Image",
-                Genres.THRILLER
-            ),
-            Book(
-                0,
-                "Test Book",
-                "Without Image",
-                Genres.THRILLER
-            ),
-            Book(
-                0,
-                "Test Book",
-                "Without Image",
-                Genres.THRILLER
-            ),
-            Book(
-                0,
-                "Test Book",
-                "Without Image",
-                Genres.THRILLER
-            ),
-            Book(
-                0,
-                "Test Book",
-                "Without Image",
-                Genres.THRILLER
-            ),
-            Book(
-                0,
-                "Test Book",
-                "Without Image",
-                Genres.THRILLER
             )
         )
         books.forEachIndexed { index, book -> book.id = index }
+
+        reviews = mutableListOf(
+            Review(
+                0,
+                0,
+                "Petya",
+                3F,
+                testString
+
+            ),
+            Review(
+                0,
+                0,
+                "Stepan",
+                3F,
+                "Norm"
+
+            ),
+            Review(
+                0,
+                0,
+                "Antonio",
+                4F,
+                testString
+            )
+        )
+        reviews.forEachIndexed { index, review -> review.id = index }
     }
 
     fun createNewBook() : Book {
@@ -412,6 +318,11 @@ object Library {
     suspend fun getBookById(bookId: Int): Book? {
         delay(mockDelay)
         return books.find { it.id == bookId }
+    }
+
+    suspend fun getReviewsByBookId(bookId: Int): List<Review> {
+        delay(mockDelay)
+        return reviews.filter { it.bookId == bookId }
     }
 
     fun changeBook(changeBookRequest: ChangeBookRequest) : Boolean {

@@ -6,6 +6,7 @@ import com.example.data.model.toAddBookRequest
 import com.example.domain.model.Book
 import com.example.domain.model.ChangeBookRequest
 import com.example.domain.model.Genres
+import com.example.domain.model.Review
 import com.example.domain.model.State
 import com.example.domain.repository.BookRepository
 import javax.inject.Inject
@@ -65,6 +66,10 @@ class BookRepositoryImpl @Inject constructor() : BookRepository {
 
     override suspend fun getBookById(bookId: Int): Book? {
         return Library.getBookById(bookId)
+    }
+
+    override suspend fun getReviewsByBookId(bookId: Int): List<Review> {
+        return Library.getReviewsByBookId(bookId)
     }
 
     override fun changeBook(changeBookRequest: ChangeBookRequest): Boolean {

@@ -1,77 +1,74 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".bookEdit.EditBookFragment">
-
 
     <ProgressBar
         android:id="@+id/loadingProgressBar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:visibility="gone"
-        android:layout_gravity="center" />
+        android:layout_gravity="center"
+        android:visibility="gone" />
 
     <TextView
         android:id="@+id/errorTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:visibility="gone"
         android:layout_gravity="center"
+        android:visibility="gone"
         tools:text="Error message" />
 
     <LinearLayout
         android:id="@+id/editBookLinearLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:padding="20dp"
         android:clipChildren="false"
         android:clipToPadding="false"
-        android:orientation="vertical">
-
-
+        android:orientation="vertical"
+        android:padding="20dp">
 
         <TextView
+            style="@style/Text.H1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textAlignment="center"
-
-            android:textColor="@color/black"
             android:background="@color/orange_light"
             android:padding="20dp"
-            android:text="@string/edit_book"
-            style="@style/TextAppearance.H1"/>
+            android:text="@string/title_edit_book"
+            android:textAlignment="center"/>
 
         <TextView
             android:id="@+id/bookTitleTextView"
+            style="@style/Text.H2.DayNight"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textAlignment="center"
             android:padding="10dp"
+            android:textAlignment="center"
             android:textSize="25sp"
-            tools:text="BOOK TITLE"
-            style="@style/TextAppearance.H2"/>
+            tools:text="BOOK TITLE" />
 
         <TextView
             android:id="@+id/hintTextView"
+            style="@style/Text.Body1.DayNight"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="20dp"
-            android:text="@string/enter_a_new_book_parameter_or_leave_it_blank"
-            style="@style/TextAppearance.Body1"/>
+            android:text="@string/hint_how_to_edit_book" />
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/titleEditTextLayout"
-            android:layout_marginTop="30dp"
+            style="@style/InputLayoutStyle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:layout_marginLeft="-10dp"
+            android:layout_marginTop="30dp"
             android:layout_marginRight="-10dp"
-            android:hint="@string/enter_a_new_book_title"
-            style="@style/InputLayoutStyle">
+            android:hint="@string/hint_new_book_title_input">
 
             <com.google.android.material.textfield.TextInputEditText
-                style="@style/TextAppearance.Subtitle1"
+                style="@style/InputEditTextStyle.DayNight"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent" />
 
@@ -79,70 +76,65 @@
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/authorEditTextLayout"
+            style="@style/InputLayoutStyle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="30dp"
             android:layout_marginLeft="-10dp"
+            android:layout_marginTop="30dp"
             android:layout_marginRight="-10dp"
-            android:hint="@string/enter_a_new_book_author"
-            style="@style/InputLayoutStyle">
+            android:hint="@string/hint_new_book_author_input">
 
             <com.google.android.material.textfield.TextInputEditText
-                style="@style/TextAppearance.Subtitle1"
+                style="@style/InputEditTextStyle.DayNight"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent" />
 
         </com.google.android.material.textfield.TextInputLayout>
 
-
-
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/genresDropMenuLayout"
+            style="@style/InputLayoutStyle.ExposedDropDownMenu"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="30dp"
             android:layout_marginLeft="-10dp"
+            android:layout_marginTop="30dp"
             android:layout_marginRight="-10dp"
-            android:hint="@string/select_a_new_book_genre"
-            style="@style/InputLayoutStyle.ExposedDropDownMenu">
+            android:hint="@string/hint_edit_genre_input">
 
             <AutoCompleteTextView
                 android:id="@+id/autoCompleteTV"
-                style="@style/TextAppearance.Subtitle1"
+                style="@style/InputEditTextStyle.DayNight"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:inputType="none"/>
+                android:inputType="none" />
 
         </com.google.android.material.textfield.TextInputLayout>
-    <LinearLayout
-        android:id="@+id/switchLinearLayout"
-        android:layout_width="match_parent"
-        android:layout_marginTop="30dp"
-        android:layout_height="0dp"
-        android:layout_weight="1"
 
-        android:orientation="horizontal">
-        <TextView
-            android:id="@+id/hintSwitchTextView"
-            android:layout_width="0dp"
+        <LinearLayout
+            android:id="@+id/switchLinearLayout"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_marginTop="30dp"
             android:layout_weight="1"
-            android:layout_height="wrap_content"
+            android:orientation="horizontal">
 
-            android:text="Enable to mark this book as a favorite."
-            style="@style/TextAppearance.Body1"/>
+            <TextView
+                android:id="@+id/hintSwitchTextView"
+                style="@style/Text.Body1.DayNight"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/hint_mark_as_favorite_switch" />
 
-        <androidx.appcompat.widget.SwitchCompat
-            android:id="@+id/switchIsFavorite"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:track="@drawable/shape_switch_track"
-            android:thumb="@drawable/shape_switch_thumb"
-            style="@style/CustomSwitch"
-            />
+            <androidx.appcompat.widget.SwitchCompat
+                android:id="@+id/switchIsFavorite"
+                style="@style/CustomSwitch"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:thumb="@drawable/shape_switch_thumb"
+                app:track="@drawable/shape_switch_track" />
 
-    </LinearLayout>
-
-
+        </LinearLayout>
 
         <LinearLayout
             android:id="@+id/buttonsLinearLayout"
@@ -152,50 +144,32 @@
             android:orientation="horizontal">
 
             <com.google.android.material.button.MaterialButton
-
                 android:id="@+id/cancelEditBookButton"
+                style="@style/ButtonSecondary"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:backgroundTint="@color/purple_light"
-                android:layout_marginTop="5dp"
                 android:layout_marginStart="10dp"
+                android:layout_marginTop="5dp"
                 android:layout_marginEnd="5dp"
-                android:text="@string/cancel"
-                android:textColor="@color/black"
-                app:cornerRadius="15dp"
+                android:layout_weight="1"
+                android:text="@string/btn_cancel"
                 app:icon="@drawable/ic_cancel"
-                app:iconTint="@color/black"
                 app:iconGravity="textStart"
-                android:maxLines="1"
-                style="@style/TextAppearance.AppCompat.Button"/>
+                app:iconTint="@color/black" />
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/confirmEditBookButton"
+                style="@style/ButtonPrimary"
                 android:layout_width="0dp"
-                android:layout_weight="1"
                 android:layout_height="match_parent"
-                android:layout_marginEnd="10dp"
                 android:layout_marginTop="5dp"
-                android:backgroundTint="@color/orange_light"
-                android:text="@string/save"
-                android:textColor="@color/black"
-                app:cornerRadius="15dp"
+                android:layout_marginEnd="10dp"
+                android:layout_weight="1"
+                android:text="@string/btn_save"
                 app:icon="@drawable/ic_edit"
-                app:iconTint="@color/black"
                 app:iconGravity="textEnd"
-                android:maxLines="1"
-                style="@style/TextAppearance.AppCompat.Button"/>
+                app:iconTint="@color/black" />
 
         </LinearLayout>
-
-
-
-
-
-
     </LinearLayout>
-
-
-
 </FrameLayout>

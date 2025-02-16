@@ -10,6 +10,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+
         android:padding="16dp">
 
         <ImageView
@@ -24,73 +25,69 @@
             tools:srcCompat="@drawable/ic_book" />
 
         <TextView
-            android:id="@+id/titleTextView"
+            android:id="@+id/usernameTextView"
+            style="@style/Text.Subtitle1.DayNight"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             app:layout_constraintEnd_toStartOf="@id/favoriteImageView"
             app:layout_constraintStart_toEndOf="@+id/bookImageView"
             app:layout_constraintTop_toTopOf="@+id/bookImageView"
-            tools:text="Book Title"
-            style="@style/TextAppearance.Subtitle1"/>
+            tools:text="Book Title" />
 
         <ImageView
             android:id="@+id/favoriteImageView"
             android:layout_width="35dp"
             android:layout_height="35dp"
-
             android:src="@drawable/ic_borrowed_books"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/titleTextView"
+            app:layout_constraintTop_toTopOf="@+id/usernameTextView"
             app:tint="@color/black"
             tools:tint="@color/orange_light" />
 
 
         <TextView
             android:id="@+id/authorTextView"
+            style="@style/Text.Body1.DayNight"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/bookImageView"
-            app:layout_constraintTop_toBottomOf="@+id/titleTextView"
-            tools:text="Author"
-            style="@style/TextAppearance.Body1"/>
+            app:layout_constraintTop_toBottomOf="@+id/usernameTextView"
+            tools:text="Author" />
 
         <TextView
             android:id="@+id/genreTextView"
+            style="@style/Text.Body1.DayNight"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/bookImageView"
             app:layout_constraintTop_toBottomOf="@+id/authorTextView"
-            tools:text="Genre"
-            style="@style/TextAppearance.Body1"/>
+            tools:text="Genre" />
 
         <TextView
             android:id="@+id/availabilityTextView"
+            style="@style/Text.Body1.DayNight"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:layout_marginTop="8dp"
-
             app:layout_constraintStart_toEndOf="@+id/bookImageView"
             app:layout_constraintTop_toBottomOf="@+id/genreTextView"
-            tools:text="Available: 5/10"
-            style="@style/TextAppearance.Body1"/>
+            tools:text="Available: 5/10" />
 
         <Button
             android:id="@+id/borrowButton"
+            style="@style/ButtonForItems"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            android:backgroundTint="@color/black"
-            android:textColor="@color/white"
-            android:text="@string/borrow"
-            app:layout_constraintTop_toTopOf="@+id/availabilityTextView"
+            android:text="@string/btn_borrow"
             app:layout_constraintEnd_toEndOf="parent"
-             />
+            app:layout_constraintTop_toTopOf="@+id/availabilityTextView" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.cardview.widget.CardView>

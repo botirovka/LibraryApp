@@ -1,120 +1,69 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".reviews.ReviewsFragment">
 
     <ProgressBar
         android:id="@+id/loadingProgressBar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:visibility="gone"
         android:layout_gravity="center"
-        />
+        android:visibility="gone" />
 
     <TextView
         android:id="@+id/errorTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:visibility="gone"
         android:layout_gravity="center"
+        android:visibility="gone"
         tools:text="Error message" />
 
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/reviewsContainerCL"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:backgroundTint="@color/purple_light"
+        android:padding="16dp">
 
-
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/reviewsContainerCL"
-            android:backgroundTint="@color/purple_light"
+        <TextView
+            android:id="@+id/reviewsTitleTextView"
+            style="@style/Text.H2"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="16dp">
+            android:background="@color/orange_light"
+            android:padding="20dp"
+            android:text="@string/title_reviews"
+            android:textAlignment="center"
+            app:layout_constraintTop_toTopOf="parent" />
 
-            <TextView
-                android:id="@+id/reviewsTitleTextView"
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/authorEditTextLayout"
+            style="@style/InputLayoutStyle"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:hint="@string/hint_review_input"
+            app:endIconDrawable="@drawable/ic_arrow_forward"
+            app:endIconMode="custom"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/reviewsTitleTextView">
+
+            <com.google.android.material.textfield.TextInputEditText
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textAlignment="center"
-                android:textSize="25sp"
-                android:textColor="@color/black"
-                android:background="@color/orange_light"
-                android:padding="20dp"
-                app:layout_constraintTop_toTopOf="parent"
-                android:text="Reviews"
-                style="@style/TextAppearance.H1"/>
+                android:layout_height="match_parent" />
 
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/authorEditTextLayout"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
+        </com.google.android.material.textfield.TextInputLayout>
 
-                android:hint="@string/share_your_thoughts_about_this_book"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/reviewsTitleTextView"
-                app:endIconMode="custom"
-                app:endIconDrawable="@drawable/ic_arrow_forward"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvReviews"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            app:layout_constraintTop_toBottomOf="@id/authorEditTextLayout"
+            tools:listitem="@layout/item_review"/>
 
-                <com.google.android.material.textfield.TextInputEditText
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent" />
-
-            </com.google.android.material.textfield.TextInputLayout>
-
-
-
-            <ImageView
-                android:id="@+id/profileImageView"
-                android:layout_width="120dp"
-                android:layout_height="120dp"
-                android:scaleType="centerCrop"
-                android:layout_marginTop="10dp"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/authorEditTextLayout"
-                android:src="@drawable/ic_account"
-                app:tint="@color/orange_light" />
-
-            <TextView
-                android:id="@+id/titleTextView"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:textSize="18sp"
-                android:textStyle="bold"
-                app:layout_constraintStart_toEndOf="@+id/profileImageView"
-                app:layout_constraintTop_toTopOf="@+id/profileImageView"
-                tools:text="Username" />
-
-
-            <TextView
-                android:id="@+id/reviewTextView"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/profileImageView"
-                app:layout_constraintTop_toBottomOf="@+id/titleTextView"
-                tools:text="Good" />
-
-            <TextView
-                android:id="@+id/ratingTextView"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="8dp"
-
-                app:layout_constraintStart_toEndOf="@+id/profileImageView"
-                app:layout_constraintTop_toBottomOf="@+id/reviewTextView"
-                tools:text=" 5/10" />
-
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
-
-
-
-
-
-
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </FrameLayout>
