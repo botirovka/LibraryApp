@@ -4,18 +4,25 @@ import android.util.Log
 import com.example.data.model.AddBookRequest
 import com.example.data.model.toBook
 import com.example.domain.extensions.Extensions.Companion.groupByGenre
+import com.example.domain.extensions.Extensions.Companion.printPretty
 import com.example.domain.extensions.Extensions.Companion.sortedByTitleAvailableFirstAscending
+import com.example.domain.model.Author
 import com.example.domain.model.Book
 import com.example.domain.model.ChangeBookRequest
 import com.example.domain.model.Genres
 import com.example.domain.model.Review
 import com.example.domain.model.State
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 object Library {
     private val books: MutableList<Book>
     private val reviews: MutableList<Review>
+    private val authors: MutableList<Author>
+
     private const val mockDelay: Long = 1000L
     private val testString = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. " +
             "Curabitur consequat mattis tortor ac semper. " +
@@ -102,18 +109,6 @@ object Library {
                 "Test Book",
                 "Without Image",
                 Genres.THRILLER
-            ),
-            Book(
-                0,
-                "Test Book",
-                "Without Image",
-                Genres.THRILLER
-            ),
-            Book(
-                0,
-                "Test Book",
-                "Without Image",
-                Genres.THRILLER
             )
         )
         books.forEachIndexed { index, book -> book.id = index }
@@ -144,13 +139,46 @@ object Library {
             )
         )
         reviews.forEachIndexed { index, review -> review.id = index }
+
+        authors = mutableListOf(
+            Author(
+                0,
+                "J.K. Rowling",
+                "https://i.imgur.com/brSE06y.jpeg",
+                0,
+                0F
+            ),
+            Author(
+                0,
+                "Stieg Larsson",
+                "https://i.imgur.com/s9bFSVo.png",
+                0,
+                0F
+            ),
+            Author(
+                0,
+                "Without Image",
+                "",
+                0,
+                0F
+            )
+        )
+        CoroutineScope(Dispatchers.IO).launch {
+            authors.forEachIndexed { index, author ->
+                val booksByAuthor = searchBooks(author.name)
+                author.id = index
+                author.totalBooksCount = booksByAuthor.size
+                author.rating = booksByAuthor.getAverageRatingByBooksList().toFloat()
+            }
+        }
     }
+
 
     fun createNewBook() : Book {
         return Book(
             id = books.size,
             title = "New Book Title ${books.size}",
-            author = "New Book Author",
+            author = "Without Image",
             genre = Genres.FANTASY,
             totalBookCount = 10,
             borrowedCount = 0
@@ -185,7 +213,7 @@ object Library {
 
     //Refactor all expensive functions
     suspend fun getAllBooks(query: String = ""): State {
-        delay(mockDelay + 2000)
+        delay(mockDelay)
         if(query.isNotEmpty()){
             val booksByQuery = searchBooks(query)
             return if (booksByQuery.isNotEmpty()){
@@ -200,6 +228,11 @@ object Library {
         } else {
             State.Error("No books found")
         }
+    }
+
+    suspend fun getAllAuthors(): List<Author>{
+        delay(mockDelay)
+        return authors.toList()
     }
 
     suspend fun getAllBorrowedBooks(): State {
@@ -265,11 +298,15 @@ object Library {
     }
 
 
-    fun addBook(addBookRequest: AddBookRequest): Int {
+    suspend fun addBook(addBookRequest: AddBookRequest): Int {
+        delay(mockDelay)
+        Log.d("mydebug", "addBook: $addBookRequest ")
+        val newBook = addBookRequest.toBook()
         books.add(
-            addBookRequest.toBook()
+            newBook
         )
-        return books.lastIndex
+        Log.d("mydebug", "addBook: ${books.printPretty()} ")
+        return newBook.id
     }
 
     suspend fun searchBooks(request: String): List<Book> {
@@ -277,7 +314,16 @@ object Library {
         val lowerCaseRequest = request.lowercase()
         return books.filter {
             it.title.lowercase().contains(lowerCaseRequest) ||
-                    it.genre.name.lowercase().contains(lowerCaseRequest)
+            it.genre.name.lowercase().contains(lowerCaseRequest) ||
+                    it.author.lowercase().contains(lowerCaseRequest)
+        }
+    }
+
+    suspend fun searchAuthors(request: String): List<Author> {
+        delay(mockDelay)
+        val lowerCaseRequest = request.lowercase()
+        return authors.filter {
+            it.name.lowercase().contains(lowerCaseRequest)
         }
     }
 
@@ -294,9 +340,9 @@ object Library {
     }
 
     fun addBookToFavorite(id: Int): Boolean {
-        Log.d("mydebug", "borrowBook: ")
+        Log.d("mydebug", "favorite: $id")
         val bookByTitle = books.find { it.id == id }
-
+        Log.d("mydebug", "favorite: $bookByTitle")
         if (bookByTitle != null ) {
             bookByTitle.isFavorite = bookByTitle.isFavorite.not()
             return true
@@ -339,6 +385,11 @@ object Library {
 
         }
         return true
+    }
+
+    suspend fun List<Book>.getAverageRatingByBooksList(): Double {
+        val ratings = this.flatMap { book -> getReviewsByBookId(book.id).map { it.rating } }
+        return if (ratings.isNotEmpty()) ratings.average() else 0.0
     }
 
 

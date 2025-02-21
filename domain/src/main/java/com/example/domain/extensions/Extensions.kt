@@ -7,6 +7,7 @@ class Extensions {
 
         fun com.example.domain.model.Book.toPrettyString(): String {
             return ("\n Book " + this.title +
+                    "\n ID : ${this.id}" +
                     "\n Author: " + this.author +
                     "\n Genre: " + this.genre +
                     "\n Image:" + this.image +

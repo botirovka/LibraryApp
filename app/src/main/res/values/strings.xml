@@ -7,7 +7,7 @@
     <string name="btn_cancel">Cancel</string>
     <string name="btn_save">Save</string>
     <string name="btn_edit_book">Edit Book</string>
-    <string name="hint_search">Enter a book title or genre to search</string>
+    <string name="hint_search">Enter a book title,genre or author to search</string>
     <string name="hint_review_input">Share your thoughts about this book</string>
     <string name="hint_how_to_edit_book">Enter a new book parameter or leave it blank to keep the old one.</string>
     <string name="hint_new_book_title_input">Enter a new book title</string>
@@ -30,5 +30,7 @@
     Verryyyyyyyyyyyyyyyyy loooooonnngggggggggg teeessstttttt ssssssssssstttttttttttrrrrrrrrrriiiiiiiinnnnnnnnggggg
     Verryyyyyyyyyyyyyyyyy loooooonnngggggggggg teeessstttttt ssssssssssstttttttttttrrrrrrrrrriiiiiiiinnnnnnnnggggg
     Verryyyyyyyyyyyyyyyyy loooooonnngggggggggg teeessstttttt ssssssssssstttttttttttrrrrrrrrrriiiiiiiinnnnnnnnggggg</string>
+    <string name="title_rating_of_author_s_books">Average Rating of Author\'s Books:</string>
+    <string name="title_total_books">Total Books:</string>
 
 </resources>

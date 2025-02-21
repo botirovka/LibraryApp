@@ -34,7 +34,7 @@ class ReviewAdapter: RecyclerView.Adapter<ReviewAdapter.ReviewViewHolder>() {
 
     inner class ReviewViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         private val profileImageView: ImageView = itemView.findViewById(R.id.profileImageView)
-        private val usernameTextView: TextView = itemView.findViewById(R.id.usernameTextView)
+        private val usernameTextView: TextView = itemView.findViewById(R.id.titleTextView)
         private val ratingBar: RatingBar = itemView.findViewById(R.id.ratingBar)
         private val reviewTextView: TextView = itemView.findViewById(R.id.reviewTextView)
 

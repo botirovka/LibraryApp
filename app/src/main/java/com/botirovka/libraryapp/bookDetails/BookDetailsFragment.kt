@@ -2,17 +2,17 @@ package com.botirovka.libraryapp.bookDetails
 
 import android.os.Bundle
 import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.RecyclerView
 import com.botirovka.libraryapp.R
 import com.botirovka.libraryapp.bookList.BookAdapter
-import com.botirovka.libraryapp.bookList.BooksMVVMFragmentDirections
+import com.botirovka.libraryapp.bookList.BookListItem
 import com.botirovka.libraryapp.databinding.FragmentBookDetailsBinding
 import com.bumptech.glide.Glide
 import com.example.domain.model.Book
@@ -41,21 +41,30 @@ class BookDetailsFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         observeViewModel()
 
-        if(savedInstanceState == null){
+        if (savedInstanceState == null) {
             viewModel.loadBookDetails(args.bookId)
         }
         booksRecyclerView = binding.booksRecyclerView
 
 
-        bookAdapter = BookAdapter(::onBorrowButtonClick, ::onItemViewClick,::onFavoriteImageViewClick )
+        bookAdapter =
+            BookAdapter(::onBorrowButtonClick, ::onItemViewClick, ::onFavoriteImageViewClick)
         bookAdapter.submitList(emptyList())
         booksRecyclerView.adapter = bookAdapter
         binding.reviewsButton.setOnClickListener {
-            findNavController().navigate(BookDetailsFragmentDirections.actionBookDetailsFragmentToReviewsFragment(args.bookId))
+            findNavController().navigate(
+                BookDetailsFragmentDirections.actionBookDetailsFragmentToReviewsFragment(
+                    args.bookId
+                )
+            )
         }
 
         binding.editBookButton.setOnClickListener {
-            findNavController().navigate(BookDetailsFragmentDirections.actionBookDetailsFragmentToEditBookFragment(args.bookId))
+            findNavController().navigate(
+                BookDetailsFragmentDirections.actionBookDetailsFragmentToEditBookFragment(
+                    args.bookId
+                )
+            )
         }
 
     }
@@ -71,14 +80,16 @@ class BookDetailsFragment : Fragment() {
 
     private fun onItemViewClick(book: Book) {
         findNavController().navigate(
-            BookDetailsFragmentDirections.actionBookDetailsFragmentSelf(book.id))
+            BookDetailsFragmentDirections.actionBookDetailsFragmentSelf(book.id)
+        )
     }
 
 
     private fun observeViewModel() {
         viewModel.loading.observe(viewLifecycleOwner) { isLoading ->
             binding.loadingImageProgressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
-            binding.loadingDetailsProgressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
+            binding.loadingDetailsProgressBar.visibility =
+                if (isLoading) View.VISIBLE else View.GONE
             binding.headerContainer.visibility = if (isLoading) View.GONE else View.VISIBLE
             binding.detailsTextGroup.visibility = if (isLoading) View.GONE else View.VISIBLE
             binding.errorTextView.visibility = View.GONE
@@ -111,7 +122,8 @@ class BookDetailsFragment : Fragment() {
                 } else {
                     binding.bookImageView.visibility = View.VISIBLE
                 }
-                binding.availableTextView.text = "${book.totalBookCount - book.borrowedCount}/${book.totalBookCount}"
+                binding.availableTextView.text =
+                    "${book.totalBookCount - book.borrowedCount}/${book.totalBookCount}"
                 binding.detailsTextGroup.visibility = View.VISIBLE
                 binding.headerContainer.visibility = View.VISIBLE
                 binding.errorTextView.visibility = View.GONE
@@ -119,13 +131,15 @@ class BookDetailsFragment : Fragment() {
         }
 
         viewModel.suggestedBooksLiveData.observe(viewLifecycleOwner) { books ->
-            bookAdapter.submitList(books)
+            val bookListItems = books.map { BookListItem.BookItem(it) }
+            bookAdapter.submitList(bookListItems)
             booksRecyclerView.visibility = View.VISIBLE
 
         }
 
         viewModel.loadingSuggestedBooks.observe(viewLifecycleOwner) { isLoading ->
-            binding.loadingSuggestedBooksProgressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
+            binding.loadingSuggestedBooksProgressBar.visibility =
+                if (isLoading) View.VISIBLE else View.GONE
             booksRecyclerView.visibility = if (isLoading) View.GONE else View.VISIBLE
         }
     }

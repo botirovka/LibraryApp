@@ -24,7 +24,7 @@
         app:layout_constraintGuide_percent="0.85" />
 
     <TextView
-        android:id="@+id/usernameTextView"
+        android:id="@+id/titleTextView"
         style="@style/Text.H3.DayNight"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -45,7 +45,7 @@
         android:layout_marginTop="16dp"
         app:layout_constraintBottom_toBottomOf="@id/profileImageView"
         app:layout_constraintStart_toEndOf="@id/profileImageView"
-        app:layout_constraintTop_toBottomOf="@id/usernameTextView"
+        app:layout_constraintTop_toBottomOf="@id/titleTextView"
         tools:rating="3.5" />
 
     <TextView

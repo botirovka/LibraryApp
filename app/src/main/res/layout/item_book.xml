@@ -25,7 +25,7 @@
             tools:srcCompat="@drawable/ic_book" />
 
         <TextView
-            android:id="@+id/usernameTextView"
+            android:id="@+id/titleTextView"
             style="@style/Text.Subtitle1.DayNight"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -41,7 +41,7 @@
             android:layout_height="35dp"
             android:src="@drawable/ic_borrowed_books"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/usernameTextView"
+            app:layout_constraintTop_toTopOf="@+id/titleTextView"
             app:tint="@color/black"
             tools:tint="@color/orange_light" />
 
@@ -54,7 +54,7 @@
             android:layout_marginStart="16dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/bookImageView"
-            app:layout_constraintTop_toBottomOf="@+id/usernameTextView"
+            app:layout_constraintTop_toBottomOf="@+id/titleTextView"
             tools:text="Author" />
 
         <TextView

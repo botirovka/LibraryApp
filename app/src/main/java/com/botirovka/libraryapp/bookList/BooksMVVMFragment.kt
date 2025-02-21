@@ -11,7 +11,6 @@ import android.widget.Button
 import android.widget.ProgressBar
 import android.widget.TextView
 import android.widget.Toast
-import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
@@ -38,13 +37,10 @@ class BooksMVVMFragment : Fragment() {
     private lateinit var createNewBookButton: Button
     private lateinit var fetchAllBookButton: Button
     private var isInitialTextChange = true
-    private var isAllBookLoaded = false
     private var isMoreBookLoading: Boolean = false
     private var currentBooks: List<Book> = emptyList()
-    private var query : String = ""
+    private var query: String = ""
     private var isLoading: Boolean = false
-
-
 
 
     override fun onCreateView(
@@ -63,13 +59,13 @@ class BooksMVVMFragment : Fragment() {
         loadMoreProgressBar = binding.loadMoreProgressBar
         errorTextView = binding.errorTextView
         searchInputLayout = binding.searchEditText
-        bookAdapter = BookAdapter(::onBorrowButtonClick, ::onItemViewClick,::onFavoriteImageViewClick )
+        bookAdapter =
+            BookAdapter(::onBorrowButtonClick, ::onItemViewClick, ::onFavoriteImageViewClick)
         booksRecyclerView.adapter = bookAdapter
         createNewBookButton = binding.createNewBookButton
         fetchAllBookButton = binding.fetchAllBookButton
 
         observeViewModel()
-        setupInfiniteScroll()
         setupSearch()
 
         createNewBookButton.setOnClickListener {
@@ -79,7 +75,7 @@ class BooksMVVMFragment : Fragment() {
 
         fetchAllBookButton.setOnClickListener {
             Log.d("mydebugMVVM", "start fetch all books")
-                booksViewModel.fetchBooks()
+            booksViewModel.loadAllItems()
 
         }
 
@@ -90,30 +86,10 @@ class BooksMVVMFragment : Fragment() {
         booksViewModel.createNewBook()
         val layoutManager = booksRecyclerView.layoutManager as LinearLayoutManager
         val lastVisibleItemPosition = layoutManager.findLastVisibleItemPosition()
-        if (lastVisibleItemPosition >= currentBooks.size - 2 && isMoreBookLoading.not() && isLoading.not()){
+        if (lastVisibleItemPosition >= currentBooks.size - 2 && isMoreBookLoading.not() && isLoading.not()) {
             Log.d("mydebugPag", "loadBooks from createNewBook: $query")
-                booksViewModel.loadMoreBooks()
+            booksViewModel.loadAllItems()
         }
-    }
-
-    private fun setupInfiniteScroll() {
-        booksRecyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
-            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
-                super.onScrolled(recyclerView, dx, dy)
-                val layoutManager = recyclerView.layoutManager as LinearLayoutManager
-                val lastVisibleItemPosition = layoutManager.findLastVisibleItemPosition()
-
-
-                if (lastVisibleItemPosition == currentBooks.size - 1 && isAllBookLoaded.not() && isMoreBookLoading.not()) {
-                    Log.d("mydebugMVVM", " $isAllBookLoaded")
-                    Log.d("mydebugMVVM", "LAST VISIBLE $lastVisibleItemPosition")
-                    Log.d("mydebugMVVM", "Current last index: ${currentBooks.size - 1}")
-                    Log.d("mydebugPag", "loadBooks from scroll: $query")
-                    booksViewModel.loadMoreBooks()
-
-                }
-            }
-        })
     }
 
 
@@ -127,14 +103,15 @@ class BooksMVVMFragment : Fragment() {
     }
 
     private fun onItemViewClick(book: Book) {
-        val action = BooksMVVMFragmentDirections.actionBooksMVVMFragmentToBookDetailsFragment(book.id)
+        val action =
+            BooksMVVMFragmentDirections.actionBooksMVVMFragmentToBookDetailsFragment(book.id)
         findNavController().navigate(action)
     }
 
     private fun observeViewModel() {
-        booksViewModel.booksLiveData.observe(viewLifecycleOwner) { books ->
-            bookAdapter.submitList(books)
-            currentBooks = books
+
+        booksViewModel.itemsLiveData.observe(viewLifecycleOwner) { items ->
+            bookAdapter.submitList(items)
             booksRecyclerView.visibility = View.VISIBLE
 
         }
@@ -169,15 +146,7 @@ class BooksMVVMFragment : Fragment() {
             }
         }
 
-        lifecycleScope.launch {
-            Log.d("mydebugMVVM", " $isAllBookLoaded before stateFlow")
-            booksViewModel.isAllBookLoadedStateFlow.collectLatest {
-                isAllBookLoaded = it
 
-                Log.d("mydebugMVVM", " $isAllBookLoaded after stateFlow")
-            }
-
-        }
     }
 
     private fun setupSearch() {
@@ -191,10 +160,11 @@ class BooksMVVMFragment : Fragment() {
                 }
                 query = s.toString().trim()
                 Log.d("mydebugPag", "loadBooks from search: $query")
-                booksViewModel.loadMoreBooks(query)
+                booksViewModel.loadAllItems(query)
             }
 
             override fun afterTextChanged(editable: Editable?) {}
         })
     }
+
 }

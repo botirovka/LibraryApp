@@ -3,6 +3,7 @@ package com.example.data.repository
 
 import com.example.data.Library
 import com.example.data.model.toAddBookRequest
+import com.example.domain.model.Author
 import com.example.domain.model.Book
 import com.example.domain.model.ChangeBookRequest
 import com.example.domain.model.Genres
@@ -76,12 +77,16 @@ class BookRepositoryImpl @Inject constructor() : BookRepository {
         return Library.changeBook(changeBookRequest)
     }
 
-    override fun addBook(book: Book): Int {
+    override suspend fun addBook(book: Book): Int {
         return Library.addBook(book.toAddBookRequest())
     }
 
     override suspend fun searchBooks(request: String): List<Book> {
         return Library.searchBooks(request)
+    }
+
+    override suspend fun searchAuthors(request: String): List<Author> {
+        return Library.searchAuthors(request)
     }
 
     override fun borrowBook(title: String): Boolean {
