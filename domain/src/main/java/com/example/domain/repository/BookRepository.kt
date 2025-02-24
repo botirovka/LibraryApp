@@ -24,6 +24,8 @@ interface BookRepository {
     suspend fun getBookById(bookId: Int): Book?
     suspend fun getReviewsByBookId(bookId: Int): List<Review>
     fun changeBook(changeBookRequest: ChangeBookRequest): Boolean
+    fun deleteBooks(booksId: Set<Int>): Boolean
+    fun deleteAuthors(authorsId: Set<Int>): Boolean
     suspend fun addBook(book: Book): Int
     suspend fun searchBooks(request: String): List<Book>
     suspend fun searchAuthors(request: String): List<Author>

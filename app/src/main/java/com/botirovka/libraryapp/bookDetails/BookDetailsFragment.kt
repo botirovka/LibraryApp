@@ -48,7 +48,12 @@ class BookDetailsFragment : Fragment() {
 
 
         bookAdapter =
-            BookAdapter(::onBorrowButtonClick, ::onItemViewClick, ::onFavoriteImageViewClick)
+            BookAdapter(
+                ::onBorrowButtonClick,
+                ::onItemViewClick,
+                ::onFavoriteImageViewClick,
+                binding.toolbar
+            )
         bookAdapter.submitList(emptyList())
         booksRecyclerView.adapter = bookAdapter
         binding.reviewsButton.setOnClickListener {
@@ -66,6 +71,10 @@ class BookDetailsFragment : Fragment() {
                 )
             )
         }
+
+    }
+
+    private fun onLongItemClick(book: Book) {
 
     }
 

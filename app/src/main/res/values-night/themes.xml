@@ -2,10 +2,13 @@
     <!-- Base application theme. -->
     <style name="Base.Theme.LibraryApp" parent="Theme.Material3.DayNight.NoActionBar">
         <item name="android:fontFamily">@font/circular_std_regular</item>>
+        <item name="colorControlActivated">@color/white</item>
 
     </style>
 
     <color name="primary_color">@color/white</color>
     <color name="secondary_color">@color/black</color>
+    <color name="bg_book_color">@color/gray</color>
+
 
 </resources>

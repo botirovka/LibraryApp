@@ -12,6 +12,8 @@ import com.example.domain.model.Book
 import com.example.domain.usecase.AddNewBookUseCase
 import com.example.domain.usecase.BorrowBookUseCase
 import com.example.domain.usecase.CreateNewBookUseCase
+import com.example.domain.usecase.DeleteAuthorsUseCase
+import com.example.domain.usecase.DeleteBooksUseCase
 import com.example.domain.usecase.SearchAuthorsUseCase
 import com.example.domain.usecase.SearchBooksUseCase
 import com.example.domain.usecase.ToggleFavoriteBookUseCase
@@ -29,7 +31,9 @@ class BooksViewModel @Inject constructor(
     private val addNewBookUseCase: AddNewBookUseCase,
     private val searchBooksUseCase: SearchBooksUseCase,
     private val createNewBookUseCase: CreateNewBookUseCase,
-    private val searchAuthorsUseCase: SearchAuthorsUseCase
+    private val searchAuthorsUseCase: SearchAuthorsUseCase,
+    private val deleteBooksUseCase: DeleteBooksUseCase,
+    private val deleteAuthorsUseCase: DeleteAuthorsUseCase
 ) : ViewModel() {
 
     private val _itemsLiveData = MutableLiveData<List<BookListItem>>(emptyList())
@@ -149,4 +153,18 @@ class BooksViewModel @Inject constructor(
             }
         }
     }
-}
+
+    fun deleteItems(selectedItems: MutableSet<Int>) {
+        deleteBooksUseCase(selectedItems)
+        deleteAuthorsUseCase(selectedItems)
+        _itemsLiveData.value = _itemsLiveData.value
+            ?.filterNot { item ->
+                item is BookListItem.BookItem && item.book.id in selectedItems
+            }?.filterNot {item ->
+                item is BookListItem.AuthorItem && item.author.id in selectedItems
+            }
+
+
+    }
+        
+    }

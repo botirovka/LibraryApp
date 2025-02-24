@@ -7,6 +7,14 @@
     android:background="@color/black"
     tools:context=".bookDetails.BookDetailsFragment">
 
+    <include
+        android:id="@+id/toolbar"
+        layout="@layout/toolbar"
+        android:visibility="gone"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        tools:visibility="visible"/>
+
     <ProgressBar
         android:id="@+id/loadingImageProgressBar"
         style="@style/CustomProgressBar.Secondary"

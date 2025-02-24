@@ -77,6 +77,14 @@ class BookRepositoryImpl @Inject constructor() : BookRepository {
         return Library.changeBook(changeBookRequest)
     }
 
+    override fun deleteBooks(booksId: Set<Int>): Boolean {
+        return Library.deleteBooks(booksId)
+    }
+
+    override fun deleteAuthors(authorsId: Set<Int>): Boolean {
+        return Library.deleteAuthors(authorsId)
+    }
+
     override suspend fun addBook(book: Book): Int {
         return Library.addBook(book.toAddBookRequest())
     }

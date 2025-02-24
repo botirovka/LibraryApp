@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
+import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,6 +12,7 @@ import android.widget.Button
 import android.widget.ProgressBar
 import android.widget.TextView
 import android.widget.Toast
+import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
@@ -60,7 +62,7 @@ class BooksMVVMFragment : Fragment() {
         errorTextView = binding.errorTextView
         searchInputLayout = binding.searchEditText
         bookAdapter =
-            BookAdapter(::onBorrowButtonClick, ::onItemViewClick, ::onFavoriteImageViewClick)
+            BookAdapter(::onBorrowButtonClick, ::onItemViewClick, ::onFavoriteImageViewClick,  binding.toolbar)
         booksRecyclerView.adapter = bookAdapter
         createNewBookButton = binding.createNewBookButton
         fetchAllBookButton = binding.fetchAllBookButton
@@ -79,7 +81,38 @@ class BooksMVVMFragment : Fragment() {
 
         }
 
+        binding.toolbar.deleteImageView.setOnClickListener {
+            booksViewModel.deleteItems(bookAdapter.getSelectedItems())
+            bookAdapter.notifyItemsDeleted()
+        }
+        binding.toolbar.cancelImageView.setOnClickListener {
+            bookAdapter.notifyItemsDeleted()
+        }
 
+        setupOnBackPressedDispatcher()
+
+
+
+
+
+
+
+    }
+
+    private fun setupOnBackPressedDispatcher() {
+        val callback: OnBackPressedCallback =
+            object : OnBackPressedCallback(true) {
+                override fun handleOnBackPressed() {
+                    if (bookAdapter.isSelectMode) {
+                        bookAdapter.notifyItemsDeleted()
+                    } else {
+                        isEnabled = false
+                        requireActivity().onBackPressedDispatcher.onBackPressed()
+                        isEnabled = true
+                    }
+                }
+            }
+        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, callback)
     }
 
     private fun createNewBook() {
@@ -166,5 +199,18 @@ class BooksMVVMFragment : Fragment() {
             override fun afterTextChanged(editable: Editable?) {}
         })
     }
+
+//    private fun onItemLongClick(bookId: Int) {
+//        toggleItemSelection(bookId)
+//        bookAdapter.notifyDataSetChanged()
+//    }
+//
+//    fun toggleItemSelection(itemId: Int) {
+//        if (selectedItems.contains(itemId)) {
+//            selectedItems.remove(itemId)
+//        } else {
+//            selectedItems.add(itemId)
+//        }
+//    }
 
 }

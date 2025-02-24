@@ -17,6 +17,7 @@ import kotlinx.coroutines.Dispatchers
 
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import kotlin.random.Random
 
 object Library {
     private val books: MutableList<Book>
@@ -166,7 +167,7 @@ object Library {
         CoroutineScope(Dispatchers.IO).launch {
             authors.forEachIndexed { index, author ->
                 val booksByAuthor = searchBooks(author.name)
-                author.id = index
+                author.id = Random.nextInt()
                 author.totalBooksCount = booksByAuthor.size
                 author.rating = booksByAuthor.getAverageRatingByBooksList().toFloat()
             }
@@ -390,6 +391,16 @@ object Library {
     suspend fun List<Book>.getAverageRatingByBooksList(): Double {
         val ratings = this.flatMap { book -> getReviewsByBookId(book.id).map { it.rating } }
         return if (ratings.isNotEmpty()) ratings.average() else 0.0
+    }
+
+    fun deleteBooks(booksId: Set<Int>): Boolean {
+        books.removeIf { booksId.contains(it.id) }
+        return true
+    }
+
+    fun deleteAuthors(authorsId: Set<Int>): Boolean {
+        authors.removeIf { authorsId.contains(it.id) }
+        return true
     }
 
 

@@ -7,10 +7,24 @@
     android:layout_margin="8dp"
     app:cardCornerRadius="4dp">
 
+        <CheckBox
+            android:id="@+id/checkboxSelectBook"
+            android:visibility="gone"
+            android:layout_margin="6dp"
+            app:buttonTint="@color/primary_color"
+            android:button="@drawable/selector_checkbox"
+            android:layout_width="30dp"
+            android:clickable="false"
+            android:layout_height="30dp"
+            android:elevation="1dp"
+            tools:visibility="visible"
+            />
+
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/bookContainerCL"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-
+        android:background="@color/bg_book_color"
         android:padding="16dp">
 
         <ImageView
@@ -89,5 +103,8 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="@+id/availabilityTextView" />
 
+
+
     </androidx.constraintlayout.widget.ConstraintLayout>
+
 </androidx.cardview.widget.CardView>
