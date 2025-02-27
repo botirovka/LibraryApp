@@ -1,6 +1,6 @@
 package com.example.data
 
-import android.util.Log
+ import android.util.Log
 import com.example.data.model.AddBookRequest
 import com.example.data.model.toBook
 import com.example.domain.extensions.Extensions.Companion.groupByGenre
@@ -306,6 +306,20 @@ object Library {
         books.add(
             newBook
         )
+        var author = authors.find {
+            it.name == newBook.author
+        }
+        if(author == null){
+            author = Author(
+                0,
+                "Without Image",
+                "",
+                0,
+                0F
+            )
+            authors.add(author)
+        }
+        author.let { it.totalBooksCount++ }
         Log.d("mydebug", "addBook: ${books.printPretty()} ")
         return newBook.id
     }
@@ -394,7 +408,18 @@ object Library {
     }
 
     fun deleteBooks(booksId: Set<Int>): Boolean {
+        val booksById = books.filter { booksId.contains(it.id) }
         books.removeIf { booksId.contains(it.id) }
+        booksById.forEach {
+            book ->
+            val author = authors.find {
+                it.name == book.author
+            }
+            if (author != null) {
+                author.totalBooksCount -= 1
+            }
+        }
+
         return true
     }
 

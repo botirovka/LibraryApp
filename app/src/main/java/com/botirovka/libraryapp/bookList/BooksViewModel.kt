@@ -7,7 +7,6 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.data.Library
-import com.example.domain.extensions.Extensions.Companion.toPrettyString
 import com.example.domain.model.Book
 import com.example.domain.usecase.AddNewBookUseCase
 import com.example.domain.usecase.BorrowBookUseCase
@@ -22,7 +21,6 @@ import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
-import kotlin.random.Random
 
 @HiltViewModel
 class BooksViewModel @Inject constructor(
@@ -118,14 +116,7 @@ class BooksViewModel @Inject constructor(
             val id = addNewBookUseCase(newBook)
             Log.d("mydebug", "addNewBook: $id")
             newBook.id = id
-            Log.d("mydebug", "addNewBook: ${newBook.toPrettyString()}")
-            val currentItems = _itemsLiveData.value?.toMutableList()
-            currentItems?.let {
-                if (currentItems.size > 0){
-                    currentItems.removeAt(Random.nextInt(currentItems.size))
-                }
-                _itemsLiveData.value = currentItems + BookListItem.BookItem(newBook)
-            }
+            _itemsLiveData.value = _itemsLiveData.value?.plus(BookListItem.BookItem(newBook))
             _loadingMoreLiveData.value = false
         }
     }
@@ -154,7 +145,7 @@ class BooksViewModel @Inject constructor(
         }
     }
 
-    fun deleteItems(selectedItems: MutableSet<Int>) {
+    fun deleteItems(selectedItems: Set<Int>) {
         deleteBooksUseCase(selectedItems)
         deleteAuthorsUseCase(selectedItems)
         _itemsLiveData.value = _itemsLiveData.value
@@ -163,8 +154,13 @@ class BooksViewModel @Inject constructor(
             }?.filterNot {item ->
                 item is BookListItem.AuthorItem && item.author.id in selectedItems
             }
-
-
     }
-        
+
+    fun addToFavoriteItems(ids: Set<Int>) {
+        ids.forEach {
+            toggleFavoriteBookUseCase(it)
+        }
+        _itemsLiveData.value = _itemsLiveData.value
     }
+
+}

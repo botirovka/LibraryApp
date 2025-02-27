@@ -74,6 +74,7 @@ class BookDetailsFragment : Fragment() {
 
     }
 
+
     private fun onLongItemClick(book: Book) {
 
     }

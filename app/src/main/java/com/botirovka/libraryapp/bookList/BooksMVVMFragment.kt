@@ -1,10 +1,10 @@
 package com.botirovka.libraryapp.bookList
 
+import android.app.Dialog
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
-import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -17,8 +17,10 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.botirovka.libraryapp.R
 import com.botirovka.libraryapp.databinding.FragmentBookMVVMBinding
 import com.example.domain.model.Book
 import com.google.android.material.textfield.TextInputLayout
@@ -43,6 +45,7 @@ class BooksMVVMFragment : Fragment() {
     private var currentBooks: List<Book> = emptyList()
     private var query: String = ""
     private var isLoading: Boolean = false
+    private lateinit var touchHelper: ItemTouchHelper
 
 
     override fun onCreateView(
@@ -67,6 +70,33 @@ class BooksMVVMFragment : Fragment() {
         createNewBookButton = binding.createNewBookButton
         fetchAllBookButton = binding.fetchAllBookButton
 
+        val swipeGesture = object : SwipeGesture(requireContext()){
+            override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
+                val position = viewHolder.bindingAdapterPosition
+                if (position != RecyclerView.NO_POSITION) {
+                    when (direction) {
+                        ItemTouchHelper.LEFT -> {
+                            val ids = bookAdapter.getItemListIds(position)
+                            booksViewModel.addToFavoriteItems(ids)
+                        }
+
+                        ItemTouchHelper.RIGHT -> {
+                            val ids = bookAdapter.getItemListIds(position)
+                            booksViewModel.deleteItems(ids)
+                        }
+
+                    }
+                    touchHelper?.let {
+                        touchHelper.attachToRecyclerView(null)
+                        touchHelper.attachToRecyclerView(booksRecyclerView)
+                    }
+                    bookAdapter.notifyDataSetChanged()
+                }
+            }
+        }
+        touchHelper = ItemTouchHelper(swipeGesture)
+        touchHelper.attachToRecyclerView(booksRecyclerView)
+
         observeViewModel()
         setupSearch()
 
@@ -82,21 +112,27 @@ class BooksMVVMFragment : Fragment() {
         }
 
         binding.toolbar.deleteImageView.setOnClickListener {
-            booksViewModel.deleteItems(bookAdapter.getSelectedItems())
-            bookAdapter.notifyItemsDeleted()
+            val dialog = Dialog(requireContext())
+            dialog.setContentView(R.layout.dialog_delete_confirm)
+            dialog.window?.setLayout(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT)
+            val btnConfirm = dialog.findViewById<Button>(R.id.btnDialogConfirm)
+            val btnCancel = dialog.findViewById<Button>(R.id.btnDialogCancel)
+            dialog.show()
+            btnConfirm.setOnClickListener{
+                booksViewModel.deleteItems(bookAdapter.getSelectedItems())
+                bookAdapter.notifyItemsDeleted()
+                dialog.dismiss()
+            }
+            btnCancel.setOnClickListener {
+                dialog.cancel()
+                bookAdapter.notifyItemsDeleted()
+            }
         }
         binding.toolbar.cancelImageView.setOnClickListener {
             bookAdapter.notifyItemsDeleted()
         }
 
         setupOnBackPressedDispatcher()
-
-
-
-
-
-
-
     }
 
     private fun setupOnBackPressedDispatcher() {
@@ -129,6 +165,7 @@ class BooksMVVMFragment : Fragment() {
     private fun onBorrowButtonClick(book: Book) {
         booksViewModel.borrowBook(book)
     }
+
 
     private fun onFavoriteImageViewClick(book: Book) {
         Log.d("mydebugg", "onFavoriteImageViewClick: ")
