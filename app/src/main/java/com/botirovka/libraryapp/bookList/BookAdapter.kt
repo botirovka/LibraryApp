@@ -39,7 +39,10 @@ class BookAdapter(
     }
 
     override fun getItemId(position: Int): Long {
-        return items[position].hashCode().toLong()
+        return when(val item = items[position]){
+            is BookListItem.AuthorItem -> item.author.id.toLong()
+            is BookListItem.BookItem -> item.book.id.toLong()
+        }
     }
 
     fun getItemListIds(i: Int): Set<Int>{

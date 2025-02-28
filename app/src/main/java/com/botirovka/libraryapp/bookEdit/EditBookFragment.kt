@@ -58,7 +58,7 @@ class EditBookFragment : Fragment() {
 
         binding.confirmEditBookButton.setOnClickListener {
             val title = binding.titleEditTextLayout.editText?.text.toString()
-            val author = binding.authorEditTextLayout.editText?.text.toString()
+            val author = binding.reviewEditTextLayout.editText?.text.toString()
             val isFavorite = binding.switchIsFavorite.isChecked
             viewModel.changeBook(ChangeBookRequest(args.bookId, title, author, selectedGenre, isFavorite))
         }
@@ -92,7 +92,7 @@ class EditBookFragment : Fragment() {
                 binding.editBookLinearLayout.visibility = View.VISIBLE
                 binding.switchIsFavorite.isChecked = book.isFavorite
                 binding.titleEditTextLayout.editText?.setText(book.title)
-                binding.authorEditTextLayout.editText?.setText(book.author)
+                binding.reviewEditTextLayout.editText?.setText(book.author)
                 binding.autoCompleteTV.setText(book.genre.toString(),false)
             }
         }

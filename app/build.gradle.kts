@@ -45,6 +45,7 @@ android {
 dependencies {
     implementation(libs.hilt.android)
     implementation (libs.android.recyclerview.swipedecorator)
+    implementation (libs.material)
     kapt(libs.hilt.android.compiler)
     implementation (libs.glide)
     implementation (libs.androidx.fragment.ktx)

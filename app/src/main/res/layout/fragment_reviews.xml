@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/coordinatorLayout"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
+
     tools:context=".reviews.ReviewsFragment">
 
     <ProgressBar
@@ -25,8 +27,11 @@
         android:id="@+id/reviewsContainerCL"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:backgroundTint="@color/purple_light"
-        android:padding="16dp">
+        android:background="@drawable/bg_rounded_shape"
+        android:backgroundTint="@color/secondary_color"
+        android:padding="16dp"
+        android:clipChildren="false"
+        android:clipToPadding="false">
 
         <TextView
             android:id="@+id/reviewsTitleTextView"
@@ -40,13 +45,14 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/authorEditTextLayout"
+            android:id="@+id/reviewEditTextLayout"
             style="@style/InputLayoutStyle"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:hint="@string/hint_review_input"
             app:endIconDrawable="@drawable/ic_arrow_forward"
             app:endIconMode="custom"
+            android:paddingBottom="30dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/reviewsTitleTextView">
@@ -60,10 +66,16 @@
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rvReviews"
             android:layout_width="match_parent"
+            android:layout_marginStart="-16dp"
+            android:layout_marginEnd="-16dp"
             android:layout_height="wrap_content"
+            android:orientation="horizontal"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-            app:layout_constraintTop_toBottomOf="@id/authorEditTextLayout"
-            tools:listitem="@layout/item_review"/>
+            app:layout_constraintTop_toBottomOf="@id/reviewEditTextLayout"
+            tools:layout_editor_absoluteX="16dp"
+            tools:listitem="@layout/item_review" />
+
 
     </androidx.constraintlayout.widget.ConstraintLayout>
-</FrameLayout>
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

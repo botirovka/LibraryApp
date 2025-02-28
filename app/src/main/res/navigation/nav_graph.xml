@@ -13,6 +13,9 @@
         <action
             android:id="@+id/action_booksMVVMFragment_to_bookDetailsFragment"
             app:destination="@id/bookDetailsFragment" />
+        <action
+            android:id="@+id/action_booksMVVMFragment_to_reviewsFragment"
+            app:destination="@id/reviewsFragment" />
     </fragment>
     <fragment
         android:id="@+id/bookDetailsFragment"

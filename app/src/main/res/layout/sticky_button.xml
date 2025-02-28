@@ -1,0 +1,16 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/secondary_color"
+    android:backgroundTint="@color/secondary_color">
+
+    <Button
+        style="@style/ButtonPrimary"
+        android:id="@+id/button"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
+        android:text="@string/btn_go_to_book_details" />
+
+</LinearLayout>

@@ -16,12 +16,12 @@ import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
-import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.botirovka.libraryapp.R
 import com.botirovka.libraryapp.databinding.FragmentBookMVVMBinding
+import com.botirovka.libraryapp.reviews.ReviewsFragment
 import com.example.domain.model.Book
 import com.google.android.material.textfield.TextInputLayout
 import dagger.hilt.android.AndroidEntryPoint
@@ -65,12 +65,17 @@ class BooksMVVMFragment : Fragment() {
         errorTextView = binding.errorTextView
         searchInputLayout = binding.searchEditText
         bookAdapter =
-            BookAdapter(::onBorrowButtonClick, ::onItemViewClick, ::onFavoriteImageViewClick,  binding.toolbar)
+            BookAdapter(
+                ::onBorrowButtonClick,
+                ::onItemViewClick,
+                ::onFavoriteImageViewClick,
+                binding.toolbar
+            )
         booksRecyclerView.adapter = bookAdapter
         createNewBookButton = binding.createNewBookButton
         fetchAllBookButton = binding.fetchAllBookButton
 
-        val swipeGesture = object : SwipeGesture(requireContext()){
+        val swipeGesture = object : SwipeGesture(requireContext()) {
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
                 val position = viewHolder.bindingAdapterPosition
                 if (position != RecyclerView.NO_POSITION) {
@@ -114,11 +119,10 @@ class BooksMVVMFragment : Fragment() {
         binding.toolbar.deleteImageView.setOnClickListener {
             val dialog = Dialog(requireContext())
             dialog.setContentView(R.layout.dialog_delete_confirm)
-            dialog.window?.setLayout(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT)
             val btnConfirm = dialog.findViewById<Button>(R.id.btnDialogConfirm)
             val btnCancel = dialog.findViewById<Button>(R.id.btnDialogCancel)
             dialog.show()
-            btnConfirm.setOnClickListener{
+            btnConfirm.setOnClickListener {
                 booksViewModel.deleteItems(bookAdapter.getSelectedItems())
                 bookAdapter.notifyItemsDeleted()
                 dialog.dismiss()
@@ -173,9 +177,8 @@ class BooksMVVMFragment : Fragment() {
     }
 
     private fun onItemViewClick(book: Book) {
-        val action =
-            BooksMVVMFragmentDirections.actionBooksMVVMFragmentToBookDetailsFragment(book.id)
-        findNavController().navigate(action)
+        val bottomSheetDialog = ReviewsFragment.newInstance(book.id)
+        bottomSheetDialog.show(childFragmentManager, ReviewsFragment::class.java.simpleName)
     }
 
     private fun observeViewModel() {
@@ -237,17 +240,5 @@ class BooksMVVMFragment : Fragment() {
         })
     }
 
-//    private fun onItemLongClick(bookId: Int) {
-//        toggleItemSelection(bookId)
-//        bookAdapter.notifyDataSetChanged()
-//    }
-//
-//    fun toggleItemSelection(itemId: Int) {
-//        if (selectedItems.contains(itemId)) {
-//            selectedItems.remove(itemId)
-//        } else {
-//            selectedItems.add(itemId)
-//        }
-//    }
 
 }
