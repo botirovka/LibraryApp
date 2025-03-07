@@ -157,7 +157,7 @@
                 android:layout_marginHorizontal="25dp"
                 android:layout_marginTop="20dp"
                 android:padding="15dp"
-                android:text="@string/btn_reviews"
+                android:text="@string/btn_test_api"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="@id/bookDescriptionCentralVerticalGuideLine"
                 app:layout_constraintTop_toTopOf="parent" />

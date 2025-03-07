@@ -51,8 +51,10 @@ class EditBookViewModel @Inject constructor(
 
     fun changeBook(changeBookRequest: ChangeBookRequest) {
         Log.d("mydebugChange", "changeBookVM: $changeBookRequest")
-        if(changeBookUseCase.invoke(changeBookRequest)){
-            _changed.value = true
+        viewModelScope.launch {
+            if(changeBookUseCase.invoke(changeBookRequest)){
+                _changed.value = true
+            }
         }
     }
 

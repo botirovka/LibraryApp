@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="16dp"
+    android:background="@color/secondary_color"
+    tools:context=".apiUI.ApiFragment">
+
+
+
+        <TextView
+            android:id="@+id/resultTextView"
+            android:layout_width="match_parent"
+            android:textAppearance="@style/Text.Subtitle1.White"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:background="@color/black_overlay"
+            android:text="Results will be displayed here" />
+
+        <ProgressBar
+            android:id="@+id/loadingProgressBar"
+            android:layout_gravity="center_horizontal"
+            style="@style/CustomProgressBar.Secondary"
+            android:layout_marginVertical="30dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <Button
+            android:id="@+id/getPostsButton"
+            style="@style/ButtonPrimary"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Get All Posts" />
+
+        <Button
+            android:id="@+id/getPostByIdButton"
+            style="@style/ButtonPrimary"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Get Post by ID 1" />
+
+        <Button
+            android:id="@+id/getCommentsButton"
+            style="@style/ButtonPrimary"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Get Comments Post ID 1" />
+
+        <Button
+            android:id="@+id/createPostButton"
+            style="@style/ButtonPrimary"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Create Post" />
+        <Button
+            style="@style/ButtonPrimary"
+            android:id="@+id/updatePostButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Update Post ID 1" />
+        <Button
+            android:id="@+id/deletePostButton"
+            style="@style/ButtonPrimary"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Delete Post ID 1" />
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/usernameTextInputLayout"
+            style="@style/InputLayoutStyle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/usernameEditText"
+            style="@style/InputEditTextStyle.DayNight"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="emilys"
+            android:imeOptions="actionNext"
+            android:inputType="textPersonName" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/passwordTextInputLayout"
+            style="@style/InputLayoutStyle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/passwordEditText"
+                    style="@style/InputEditTextStyle.DayNight"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:text="emilyspass"
+                    android:imeOptions="actionNext"
+                    android:inputType="textPersonName" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <Button
+            android:id="@+id/authButton"
+            style="@style/ButtonSecondary"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Auth" />
+
+        <Button
+            android:id="@+id/getProfileInfoButton"
+            style="@style/ButtonPrimary"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Get Profile Info" />
+
+        <Button
+            android:id="@+id/logOutButton"
+            style="@style/ButtonSecondary"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Log Out" />
+
+</LinearLayout>

@@ -7,7 +7,7 @@ import javax.inject.Inject
 class ChangeBookUseCase @Inject constructor(
     private val bookRepository: BookRepository
 ) {
-    operator fun invoke(changeBookRequest: ChangeBookRequest): Boolean {
+    suspend operator fun invoke(changeBookRequest: ChangeBookRequest): Boolean {
         return bookRepository.changeBook(changeBookRequest)
     }
 }

@@ -58,9 +58,7 @@ class BookDetailsFragment : Fragment() {
         booksRecyclerView.adapter = bookAdapter
         binding.reviewsButton.setOnClickListener {
             findNavController().navigate(
-                BookDetailsFragmentDirections.actionBookDetailsFragmentToReviewsFragment(
-                    args.bookId
-                )
+                BookDetailsFragmentDirections.actionBookDetailsFragmentToApiFragment()
             )
         }
 

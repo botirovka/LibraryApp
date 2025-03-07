@@ -26,17 +26,15 @@
             android:name="bookId"
             app:argType="integer" />
         <action
-            android:id="@+id/action_bookDetailsFragment_to_reviewsFragment"
-            app:destination="@id/reviewsFragment"
-            app:popUpTo="@id/booksMVVMFragment"
-            app:popUpToInclusive="false" />
-        <action
             android:id="@+id/action_bookDetailsFragment_to_editBookFragment"
             app:destination="@id/editBookFragment" />
         <action
             android:id="@+id/action_bookDetailsFragment_self"
             app:destination="@id/bookDetailsFragment"
             app:popUpTo="@id/booksMVVMFragment" />
+        <action
+            android:id="@+id/action_bookDetailsFragment_to_apiFragment"
+            app:destination="@id/apiFragment" />
     </fragment>
     <fragment
         android:id="@+id/reviewsFragment"
@@ -65,7 +63,11 @@
     <action
         android:id="@+id/action_global_areYouSureDialog"
         app:destination="@id/AreYouSureDialogFragment" />
-
+    <fragment
+        android:id="@+id/apiFragment"
+        android:name="com.botirovka.libraryapp.apiUI.ApiFragment"
+        android:label="fragment_api"
+        tools:layout="@layout/fragment_api" />
 
 
 </navigation>
